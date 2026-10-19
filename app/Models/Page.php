@@ -13,6 +13,23 @@ class Page extends Model
 {
     use HasSeo, LogsActivity;
 
+    /**
+     * Per-page on/off options shown in the admin page editor.
+     *
+     * @var array<string, array<string, string>>
+     */
+    public const SETTINGS = [
+        'about' => [
+            'show_statistics' => 'Show statistics band (CMS → Statistics → About)',
+            'show_features' => 'Show project features',
+            'show_video' => 'Show project video',
+        ],
+        'contact' => [
+            'show_map' => 'Show map',
+            'show_callback' => 'Show “Request a callback” box',
+        ],
+    ];
+
     protected function casts(): array
     {
         return [

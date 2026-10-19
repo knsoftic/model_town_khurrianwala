@@ -2,7 +2,7 @@
 
 @php
     $key = str_replace(['[', ']'], ['.', ''], $name);
-    $id = 'f-'.str_replace('.', '-', $key);
+    $id = 'f-'.str_replace('.', '-', $key).'-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(5));
     $isOn = (bool) old($key, $checked);
 @endphp
 

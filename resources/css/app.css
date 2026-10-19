@@ -101,6 +101,11 @@
         display: none !important;
     }
 
+    /* Let grid columns shrink below their content so nothing pushes the page sideways on phones. */
+    .grid > * {
+        min-width: 0;
+    }
+
     ::selection {
         background: color-mix(in srgb, var(--brand-accent) 35%, transparent);
     }

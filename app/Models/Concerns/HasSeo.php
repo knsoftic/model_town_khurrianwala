@@ -19,7 +19,7 @@ trait HasSeo
      */
     public function syncSeo(array $attributes): void
     {
-        $attributes = array_intersect_key($attributes, array_flip(SeoSetting::EDITABLE));
+        $attributes = array_intersect_key($attributes, array_flip([...SeoSetting::EDITABLE, 'og_image']));
 
         if (array_filter($attributes, fn ($value) => filled($value)) === [] && ! $this->seo) {
             return;

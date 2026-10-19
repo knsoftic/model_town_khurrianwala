@@ -12,6 +12,7 @@ use App\View\Composers\AdminLayoutComposer;
 use App\View\Composers\FrontLayoutComposer;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
@@ -43,6 +44,10 @@ class AppServiceProvider extends ServiceProvider
             ? Password::min(10)->letters()->mixedCase()->numbers()->uncompromised()
             : Password::min(8));
 
+        if ($proxies = config('cms.trusted_proxies')) {
+            TrustProxies::at($proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)));
+        }
+
         $this->registerGates();
         $this->registerRateLimiters();
 
@@ -52,14 +57,13 @@ class AppServiceProvider extends ServiceProvider
 
     protected function registerGates(): void
     {
-        Gate::before(fn (User $user) => $user->isSuperAdmin() ? true : null);
-
+        // hasPermission() already returns true for Super Admins, so no Gate::before is needed;
+        // that keeps policy rules (e.g. "you cannot delete yourself") binding for everyone.
         foreach (array_keys(Permission::DEFINITIONS) as $permission) {
             Gate::define($permission, fn (User $user) => $user->hasPermission($permission));
         }
 
-        // Only Super Admins pass this (via Gate::before); everyone else is denied.
-        Gate::define('super-admin', fn (User $user) => false);
+        Gate::define('super-admin', fn (User $user) => $user->isSuperAdmin());
     }
 
     protected function registerRateLimiters(): void

@@ -50,6 +50,22 @@ class MediaUploader
         return $current;
     }
 
+    /**
+     * Copy a stored file under a new random name (used when duplicating records,
+     * so deleting the copy's image never removes the original's).
+     */
+    public function duplicate(?string $path): ?string
+    {
+        if (! $path || ! Storage::disk(self::DISK)->exists($path)) {
+            return $path;
+        }
+
+        $copy = 'uploads/'.trim(str_replace('uploads/', '', dirname($path)), '/').'/'.Str::random(40).'.'.pathinfo($path, PATHINFO_EXTENSION);
+        Storage::disk(self::DISK)->copy($path, $copy);
+
+        return $copy;
+    }
+
     public function delete(?string $path): void
     {
         if ($path && str_starts_with($path, 'uploads/')) {

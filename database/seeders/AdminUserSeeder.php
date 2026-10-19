@@ -11,7 +11,7 @@ class AdminUserSeeder extends Seeder
 {
     /**
      * The Super Admin login comes from SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD in .env.
-     * Two demo staff accounts (with random, unknown passwords) are added so leads can be assigned.
+     * Outside production, two demo staff accounts (random, unknown passwords) are added so leads can be assigned.
      */
     public function run(): void
     {
@@ -28,6 +28,10 @@ class AdminUserSeeder extends Seeder
             ['email' => env('SEED_ADMIN_EMAIL', 'admin@example.com')],
             ['name' => 'Super Admin', 'password' => $password, 'role_id' => $roles[Role::SUPER_ADMIN], 'is_active' => true, 'email_verified_at' => now()],
         );
+
+        if (app()->isProduction()) {
+            return;
+        }
 
         $staff = [
             ['Ali Raza (Demo)', 'sales.demo@example.com', 'sales-manager'],
