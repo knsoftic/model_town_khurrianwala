@@ -9,9 +9,11 @@ use App\Services\MailSettings;
 use App\Services\SettingsService;
 use App\Support\MapEmbed;
 use App\Support\UploadRules;
+use App\Support\VerificationTags;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
@@ -44,6 +46,7 @@ class SettingController extends Controller
         $fields = collect($this->settings->fields($group))
             ->reject(fn ($field) => ($field['super'] ?? false) && ! $request->user()->isSuperAdmin());
 
+        $request->merge($this->extracted($request, $fields));
         $request->validate($fields->mapWithKeys(fn ($field, $key) => [$key => $this->rules($key, $field)])->all());
 
         $values = [];
@@ -63,7 +66,12 @@ class SettingController extends Controller
                     }
                     break;
                 default:
-                    $values[$key] = $key === 'google_maps_embed' ? (MapEmbed::extract($value) ?? '') : (string) ($value ?? '');
+                    $values[$key] = match (true) {
+                        $key === 'google_maps_embed' => MapEmbed::extract($value) ?? '',
+                        isset($field['meta']) => VerificationTags::code($value) ?? '',
+                        (bool) ($field['meta_list'] ?? false) => VerificationTags::normalise($value),
+                        default => (string) ($value ?? ''),
+                    };
             }
         }
 
@@ -92,6 +100,26 @@ class SettingController extends Controller
     }
 
     /**
+     * IDs pulled out of pasted code for fields with an "extract" pattern
+     * (e.g. G-XXXXXXXXXX from the whole Google tag snippet).
+     *
+     * @param  Collection<string, array<string, mixed>>  $fields
+     * @return array<string, string>
+     */
+    protected function extracted(Request $request, Collection $fields): array
+    {
+        $values = [];
+
+        foreach ($fields as $key => $field) {
+            if (isset($field['extract']) && preg_match($field['extract'], (string) $request->input($key), $match)) {
+                $values[$key] = strtoupper($match[1]);
+            }
+        }
+
+        return $values;
+    }
+
+    /**
      * @param  array<string, mixed>  $field
      * @return array<int, mixed>
      */
@@ -117,6 +145,22 @@ class SettingController extends Controller
             $rules[] = function (string $attribute, mixed $value, Closure $fail) {
                 if (filled($value) && ! MapEmbed::extract($value)) {
                     $fail('Paste the Google Maps “Embed a map” iframe code or its https://www.google.com/maps… link.');
+                }
+            };
+        }
+
+        if (isset($field['meta'])) {
+            $rules[] = function (string $attribute, mixed $value, Closure $fail) use ($field) {
+                if (filled($value) && ! VerificationTags::code($value)) {
+                    $fail("Paste the {$field['label']} meta tag, or only the code inside content=\"…\".");
+                }
+            };
+        }
+
+        if ($field['meta_list'] ?? false) {
+            $rules[] = function (string $attribute, mixed $value, Closure $fail) {
+                if (filled($value) && VerificationTags::normalise($value) === '') {
+                    $fail('No usable <meta name="…" content="…"> tag was found. Scripts, links and http-equiv tags are not accepted here.');
                 }
             };
         }

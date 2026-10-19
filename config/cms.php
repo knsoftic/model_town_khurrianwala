@@ -167,19 +167,36 @@ return [
         ],
 
         'seo' => [
-            'label' => 'SEO & Analytics',
+            'label' => 'SEO & Scripts',
             'icon' => 'search',
-            'description' => 'Default meta tags, social sharing image, analytics and verification.',
+            'description' => 'Default meta tags, social sharing image and custom scripts. Verification codes and analytics are under Verification & Analytics.',
             'fields' => [
                 'seo_title' => ['type' => 'text', 'label' => 'Default website title', 'default' => 'Model Town Khurrianwala — Plots on Easy Installments'],
                 'seo_title_separator' => ['type' => 'text', 'label' => 'Title separator', 'default' => ' | '],
                 'seo_description' => ['type' => 'textarea', 'label' => 'Default meta description', 'default' => 'Book 3 Marla, 5 Marla, 10 Marla and 1 Kanal plots on flexible installment plans. View prices, payment schedules, location and development progress.', 'rules' => ['max:500']],
                 'seo_keywords' => ['type' => 'text', 'label' => 'Default meta keywords', 'default' => 'plots for sale, installment plots, 5 marla plot, 10 marla plot, 1 kanal plot, Khurrianwala, Faisalabad housing society'],
                 'og_image' => ['type' => 'image', 'label' => 'Default Open Graph image', 'help' => '1200×630 recommended. Used when a page has no image of its own.'],
-                'google_analytics_id' => ['type' => 'text', 'label' => 'Google Analytics measurement ID', 'default' => '', 'help' => 'e.g. G-XXXXXXXXXX', 'rules' => ['regex:/^(G|UA|GT|AW)-[A-Z0-9-]+$/i']],
-                'google_site_verification' => ['type' => 'text', 'label' => 'Google Search Console verification code', 'default' => '', 'help' => 'Only the content value of the meta tag.', 'rules' => ['regex:/^[A-Za-z0-9_\-]+$/']],
                 'header_scripts' => ['type' => 'code', 'label' => 'Custom header scripts', 'default' => '', 'super' => true, 'help' => 'Super Admin only. Printed inside <head>.'],
                 'footer_scripts' => ['type' => 'code', 'label' => 'Custom footer scripts', 'default' => '', 'super' => true, 'help' => 'Super Admin only. Printed before </body>.'],
+            ],
+        ],
+
+        // Fields with a "meta" key are printed as <meta name="…" content="…"> in <head>; admins may
+        // paste the whole tag or only its code. "extract" pulls the ID out of a pasted code snippet.
+        'verification' => [
+            'label' => 'Verification & Analytics',
+            'icon' => 'badge-check',
+            'description' => 'Prove you own the website to Google Search Console, Bing, Facebook and other services, and connect Google Analytics or Tag Manager.',
+            'fields' => [
+                'google_site_verification' => ['type' => 'text', 'label' => 'Google Search Console', 'meta' => 'google-site-verification', 'default' => '', 'help' => 'Search Console → Add property → URL prefix → HTML tag. Paste the whole tag or only the code.'],
+                'bing_site_verification' => ['type' => 'text', 'label' => 'Bing Webmaster Tools', 'meta' => 'msvalidate.01', 'default' => '', 'help' => 'Bing Webmaster Tools → Add site → HTML Meta Tag.'],
+                'facebook_domain_verification' => ['type' => 'text', 'label' => 'Facebook / Meta domain verification', 'meta' => 'facebook-domain-verification', 'default' => '', 'help' => 'Meta Business Settings → Brand safety → Domains → Meta-tag verification.'],
+                'yandex_verification' => ['type' => 'text', 'label' => 'Yandex Webmaster', 'meta' => 'yandex-verification', 'default' => '', 'help' => 'Yandex Webmaster → Add site → Meta tag.'],
+                'pinterest_verification' => ['type' => 'text', 'label' => 'Pinterest', 'meta' => 'p:domain_verify', 'default' => '', 'help' => 'Pinterest → Settings → Claimed accounts → Website → Add HTML tag.'],
+                'custom_meta_tags' => ['type' => 'code', 'label' => 'Other verification meta tags', 'meta_list' => true, 'default' => '', 'help' => 'For any other service (Ahrefs, Semrush, Baidu, Norton…): paste the complete <meta> tags, one per line. Only <meta name="…" content="…"> tags are kept, so this is safe for every admin.'],
+                'google_analytics_id' => ['type' => 'text', 'label' => 'Google Analytics measurement ID', 'extract' => '/\b((?:G|UA|GT|AW)-[A-Z0-9-]+)\b/i', 'default' => '', 'help' => 'e.g. G-XXXXXXXXXX. You can also paste the whole Google tag code.', 'rules' => ['regex:/^(G|UA|GT|AW)-[A-Z0-9-]+$/i']],
+                'google_tag_manager_id' => ['type' => 'text', 'label' => 'Google Tag Manager container ID', 'extract' => '/\b(GTM-[A-Z0-9]+)\b/i', 'default' => '', 'help' => 'e.g. GTM-XXXXXXX. Facebook Pixel, Microsoft Clarity and other tags can then be added inside Tag Manager.', 'rules' => ['regex:/^GTM-[A-Z0-9]+$/i']],
+                'analytics_delay' => ['type' => 'boolean', 'label' => 'Load analytics after the first scroll or tap', 'default' => '1', 'help' => 'Keeps the PageSpeed score at its best. Visitors who do not scroll or tap are still counted after 6 seconds.'],
             ],
         ],
 

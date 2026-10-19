@@ -18,9 +18,10 @@
     @if ($faviconUrl)
         <link rel="icon" href="{{ $faviconUrl }}">
     @endif
-    @if ($siteVerification)
-        <meta name="google-site-verification" content="{{ $siteVerification }}">
-    @endif
+    {{-- Site-ownership tags from Settings → Verification & Analytics. --}}
+    @foreach ($verificationTags as $tag)
+        <meta {{ $tag['attribute'] }}="{{ $tag['name'] }}" content="{{ $tag['content'] }}">
+    @endforeach
 
     @stack('head')
 
@@ -49,19 +50,53 @@
         ]);
     </script>
 
-    @if ($analyticsId)
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $analyticsId }}"></script>
+    {{-- Google Analytics / Tag Manager. Events queue in dataLayer straight away; the scripts
+         themselves load on the first scroll or tap (or after 6 s) when "analytics_delay" is on. --}}
+    @if ($analyticsId || $tagManagerId)
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', @js($analyticsId));
+            @if ($tagManagerId)
+                dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+            @endif
+            @if ($analyticsId)
+                gtag('js', new Date());
+                gtag('config', @js($analyticsId));
+            @endif
+            (function () {
+                var sources = @js(array_values(array_filter([
+                    $analyticsId ? 'https://www.googletagmanager.com/gtag/js?id='.$analyticsId : null,
+                    $tagManagerId ? 'https://www.googletagmanager.com/gtm.js?id='.$tagManagerId : null,
+                ])));
+                var loaded = false;
+                function load() {
+                    if (loaded) return;
+                    loaded = true;
+                    sources.forEach(function (src) {
+                        var script = document.createElement('script');
+                        script.async = true;
+                        script.src = src;
+                        document.head.appendChild(script);
+                    });
+                }
+                @if ($analyticsDelay)
+                    ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (name) {
+                        window.addEventListener(name, load, { once: true, passive: true });
+                    });
+                    window.addEventListener('load', function () { setTimeout(load, 6000); });
+                @else
+                    load();
+                @endif
+            })();
         </script>
     @endif
 
     {!! $headerScripts !!}
 </head>
 <body class="flex min-h-screen flex-col">
+    @if ($tagManagerId)
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $tagManagerId }}" title="Google Tag Manager" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    @endif
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-primary">Skip to content</a>
 
     @include('front.partials.header', ['transparent' => $isHome && setting_enabled('header_transparent_home')])
