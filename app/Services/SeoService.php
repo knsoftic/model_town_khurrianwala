@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Location;
 use App\Models\SeoSetting;
 use App\Support\SeoData;
 use Illuminate\Database\Eloquent\Model;
@@ -62,6 +63,7 @@ class SeoService
     public function organizationSchema(): array
     {
         $logo = media_url($this->settings->get('logo')) ?? media_url($this->settings->get('header_logo'));
+        $location = Location::query()->active()->orderByDesc('is_featured')->ordered()->first(['city', 'latitude', 'longitude']);
 
         return array_filter([
             '@context' => 'https://schema.org',
@@ -73,11 +75,19 @@ class SeoService
             'image' => $logo ? url($logo) : null,
             'telephone' => $this->settings->get('phone'),
             'email' => $this->settings->get('email'),
-            'address' => $this->settings->get('office_address') ? [
+            'address' => $this->settings->get('office_address') ? array_filter([
                 '@type' => 'PostalAddress',
                 'streetAddress' => $this->settings->get('office_address'),
+                'addressLocality' => $location?->city,
                 'addressCountry' => 'PK',
+            ]) : null,
+            // Map pin of the main project location, for Google Maps and local search results.
+            'geo' => $location?->latitude && $location->longitude ? [
+                '@type' => 'GeoCoordinates',
+                'latitude' => $location->latitude,
+                'longitude' => $location->longitude,
             ] : null,
+            'hasMap' => $this->settings->get('google_maps_url') ?: null,
             'openingHours' => $this->settings->get('office_hours'),
         ]);
     }

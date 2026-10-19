@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             SiteContentSeeder::class,
             PlotSeeder::class,
             ProjectContentSeeder::class,
+            ProjectDataSeeder::class,
         ]);
 
         if (! app()->isProduction()) {
