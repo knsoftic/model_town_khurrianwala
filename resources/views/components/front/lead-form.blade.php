@@ -25,7 +25,7 @@
         <h3 @class(['text-2xl font-semibold', 'text-white' => $dark, 'text-primary' => ! $dark])>{{ $title }}</h3>
     @endif
     @if ($intro)
-        <p @class(['mt-1.5 text-sm', 'text-white/70' => $dark, 'text-ink/60' => ! $dark])>{{ $intro }}</p>
+        <p @class(['mt-1.5 text-sm', 'text-white/70' => $dark, 'text-ink/70' => ! $dark])>{{ $intro }}</p>
     @endif
 
     @if (session('form_success'))
@@ -117,7 +117,7 @@
                 <x-icon name="loader-circle" class="size-4 animate-spin" x-cloak x-show="loading" />
                 <span x-text="loading ? 'Sending…' : @js($submitLabel)">{{ $submitLabel }}</span>
             </button>
-            <p @class(['mt-3 flex items-center justify-center gap-1.5 text-xs', 'text-white/50' => $dark, 'text-ink/50' => ! $dark])>
+            <p @class(['mt-3 flex items-center justify-center gap-1.5 text-xs', 'text-white/50' => $dark, 'text-ink/70' => ! $dark])>
                 <x-icon name="lock" class="size-3.5" /> Your details are only used to contact you about your inquiry.
             </p>
         </div>

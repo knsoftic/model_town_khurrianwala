@@ -3,7 +3,7 @@
 <figure {{ $attributes->class(['relative flex h-full flex-col rounded-brand-lg border border-primary/8 bg-white p-7 shadow-soft']) }}>
     <x-icon name="quote" class="absolute top-6 right-6 size-10 text-accent/25" stroke="1.25" />
 
-    <div class="flex gap-0.5 text-accent" aria-label="{{ $testimonial->rating }} out of 5 stars">
+    <div class="flex gap-0.5 text-accent" role="img" aria-label="{{ $testimonial->rating }} out of 5 stars">
         @for ($i = 1; $i <= 5; $i++)
             <svg viewBox="0 0 20 20" @class(['size-4.5', 'fill-current' => $i <= $testimonial->rating, 'fill-primary/10' => $i > $testimonial->rating]) aria-hidden="true">
                 <path d="M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9L10 1.5z" />
@@ -22,13 +22,13 @@
 
     <figcaption class="mt-6 flex items-center gap-3.5 border-t border-primary/8 pt-5">
         @if ($testimonial->client_image)
-            <img src="{{ media_url($testimonial->client_image) }}" alt="{{ $testimonial->client_name }}" loading="lazy" class="size-12 rounded-full object-cover ring-2 ring-accent/40">
+            <img {{ img_attrs($testimonial->client_image, '48px', [96, 192]) }} alt="{{ $testimonial->client_name }}" loading="lazy" class="size-12 rounded-full object-cover ring-2 ring-accent/40">
         @else
             <span class="grid size-12 shrink-0 place-items-center rounded-full bg-primary font-heading text-base font-semibold text-accent">{{ $testimonial->initials() }}</span>
         @endif
         <div class="min-w-0">
             <p class="font-semibold text-primary">{{ $testimonial->client_name }}</p>
-            <p class="truncate text-xs text-ink/55">
+            <p class="truncate text-xs text-ink/70">
                 {{ collect([$testimonial->client_title, $testimonial->location])->filter()->implode(' · ') }}
             </p>
         </div>

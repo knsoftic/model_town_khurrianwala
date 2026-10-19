@@ -1,7 +1,9 @@
 <?php
 
+use App\Services\ResponsiveImages;
 use App\Services\SettingsService;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\HtmlString;
 
 if (! function_exists('setting')) {
     /**
@@ -35,6 +37,57 @@ if (! function_exists('media_url')) {
         }
 
         return Storage::disk('public')->url($path);
+    }
+}
+
+if (! function_exists('img_attrs')) {
+    /**
+     * src / srcset / sizes / width / height for an <img>, serving resized WebP
+     * copies of uploads: <img {{ img_attrs($path, '(min-width: 1024px) 50vw, 100vw') }} alt="">.
+     * Pass $height for fixed-height images such as logos.
+     *
+     * @param  array<int, int>  $widths
+     */
+    function img_attrs(?string $path, string $sizes = '100vw', array $widths = [480, 768, 960, 1600], ?int $height = null): HtmlString
+    {
+        $attributes = app(ResponsiveImages::class)->attributes($path, $sizes, $widths, $height);
+
+        return new HtmlString(collect($attributes)->map(fn ($value, $name) => $name.'="'.e($value).'"')->implode(' '));
+    }
+}
+
+if (! function_exists('img_preload')) {
+    /**
+     * <link rel="preload"> for the above-the-fold image, so the browser starts
+     * downloading it before it has read the stylesheet and the page body.
+     *
+     * @param  array<int, int>  $widths
+     */
+    function img_preload(?string $path, string $sizes = '100vw', array $widths = [480, 768, 960, 1600]): HtmlString
+    {
+        $attributes = app(ResponsiveImages::class)->attributes($path, $sizes, $widths);
+
+        if (! isset($attributes['src'])) {
+            return new HtmlString('');
+        }
+
+        $link = '<link rel="preload" as="image" href="'.e($attributes['src']).'"';
+
+        if (isset($attributes['srcset'])) {
+            $link .= ' imagesrcset="'.e($attributes['srcset']).'" imagesizes="'.e($attributes['sizes']).'"';
+        }
+
+        return new HtmlString($link.' fetchpriority="high">');
+    }
+}
+
+if (! function_exists('img_url')) {
+    /**
+     * URL of an upload resized to $width (falls back to the original file).
+     */
+    function img_url(?string $path, int $width = 1600): ?string
+    {
+        return app(ResponsiveImages::class)->url($path, $width);
     }
 }
 

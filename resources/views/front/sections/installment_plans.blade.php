@@ -30,21 +30,21 @@
                         <div class="card overflow-hidden">
                             <div class="relative aspect-[16/9] bg-surface">
                                 @if ($plot->image)
-                                    <img src="{{ media_url($plot->image) }}" alt="{{ $plot->title }}" loading="lazy" class="size-full object-cover">
+                                    <img {{ img_attrs($plot->image, '(min-width: 1024px) 380px, 100vw', [320, 480, 640, 960]) }} alt="{{ $plot->title }}" loading="lazy" class="size-full object-cover">
                                 @endif
                                 <x-front.status-badge :status="$plot->status" class="absolute top-3 left-3 bg-white!" />
                             </div>
                             <div class="p-6">
-                                <p class="text-xs font-semibold tracking-wider text-accent uppercase">{{ $plot->size_label }}</p>
+                                <p class="text-xs font-semibold tracking-wider text-accent-ink uppercase">{{ $plot->size_label }}</p>
                                 <h3 class="mt-1 text-xl font-semibold text-primary">{{ $plan->name }}</h3>
                                 @if ($plan->description)
-                                    <p class="mt-2 text-sm text-ink/60">{{ $plan->description }}</p>
+                                    <p class="mt-2 text-sm text-ink/70">{{ $plan->description }}</p>
                                 @endif
                                 <dl class="mt-5 grid grid-cols-2 gap-3 text-sm">
-                                    <div class="rounded-brand-sm bg-surface p-3"><dt class="text-xs text-ink/55">Total Price</dt><dd class="mt-0.5 font-semibold text-primary">{{ money($summary->totalPrice) }}</dd></div>
-                                    <div class="rounded-brand-sm bg-surface p-3"><dt class="text-xs text-ink/55">Booking</dt><dd class="mt-0.5 font-semibold text-primary">{{ money($summary->amountFor('booking')) }}</dd></div>
-                                    <div class="rounded-brand-sm bg-surface p-3"><dt class="text-xs text-ink/55">Installment</dt><dd class="mt-0.5 font-semibold text-primary">{{ money($summary->installmentAmount) }}</dd></div>
-                                    <div class="rounded-brand-sm bg-surface p-3"><dt class="text-xs text-ink/55">Duration</dt><dd class="mt-0.5 font-semibold text-primary">{{ $summary->durationMonths }} months</dd></div>
+                                    <div class="rounded-brand-sm bg-surface p-3"><dt class="text-xs text-ink/70">Total Price</dt><dd class="mt-0.5 font-semibold text-primary">{{ money($summary->totalPrice) }}</dd></div>
+                                    <div class="rounded-brand-sm bg-surface p-3"><dt class="text-xs text-ink/70">Booking</dt><dd class="mt-0.5 font-semibold text-primary">{{ money($summary->amountFor('booking')) }}</dd></div>
+                                    <div class="rounded-brand-sm bg-surface p-3"><dt class="text-xs text-ink/70">Installment</dt><dd class="mt-0.5 font-semibold text-primary">{{ money($summary->installmentAmount) }}</dd></div>
+                                    <div class="rounded-brand-sm bg-surface p-3"><dt class="text-xs text-ink/70">Duration</dt><dd class="mt-0.5 font-semibold text-primary">{{ $summary->durationMonths }} months</dd></div>
                                 </dl>
                                 <div class="mt-6 grid gap-2.5">
                                     @if ($plot->isBookable())
@@ -53,7 +53,7 @@
                                     <a href="{{ route('plots.show', $plot) }}#payment-plan" class="btn-outline">View {{ $plot->size_label }} Details</a>
                                 </div>
                                 @if ($plot->activePlans->count() > 1)
-                                    <p class="mt-4 text-center text-xs text-ink/55">+{{ $plot->activePlans->count() - 1 }} more {{ str('plan')->plural($plot->activePlans->count() - 1) }} available for {{ $plot->size_label }}</p>
+                                    <p class="mt-4 text-center text-xs text-ink/70">+{{ $plot->activePlans->count() - 1 }} more {{ str('plan')->plural($plot->activePlans->count() - 1) }} available for {{ $plot->size_label }}</p>
                                 @endif
                             </div>
                         </div>

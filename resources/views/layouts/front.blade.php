@@ -22,13 +22,23 @@
         <meta name="google-site-verification" content="{{ $siteVerification }}">
     @endif
 
+    @stack('head')
+
+    {{-- Fonts load without holding up the first paint; text shows in the fallback font until they arrive. --}}
     @if ($fontsUrl)
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="{{ $fontsUrl }}">
+        <link rel="stylesheet" href="{{ $fontsUrl }}" media="print" onload="this.media='all'">
+        <noscript><link rel="stylesheet" href="{{ $fontsUrl }}"></noscript>
     @endif
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- The stylesheet is printed inline in production, saving a round trip before the page can render. --}}
+    @if (config('cms.inline_css') && ! \Illuminate\Support\Facades\Vite::isRunningHot())
+        <style>{!! \Illuminate\Support\Facades\Vite::content('resources/css/app.css') !!}</style>
+        @vite('resources/js/app.js')
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
 
     <style>{!! $themeCss !!}:root{--chrome-h:{{ $chrome }}px}@media (min-width:768px){:root{--chrome-h:{{ $chromeMd }}px}}{!! $customCss !!}</style>
 
@@ -50,7 +60,6 @@
     @endif
 
     {!! $headerScripts !!}
-    @stack('head')
 </head>
 <body class="flex min-h-screen flex-col">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-primary">Skip to content</a>

@@ -77,7 +77,7 @@
     </section>
 
     @if ($features->isNotEmpty())
-        <section class="bg-white py-16 sm:py-20">
+        <section data-defer class="bg-white py-16 sm:py-20">
             <div class="container-x">
                 <x-front.section-heading eyebrow="Amenities" heading="Community Features" />
                 <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

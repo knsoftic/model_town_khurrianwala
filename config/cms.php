@@ -44,6 +44,10 @@ return [
     // so visitor IPs, HTTPS detection and the form rate limits use the real client address.
     'trusted_proxies' => env('TRUSTED_PROXIES'),
 
+    // Print the front-end stylesheet inside each page instead of linking it, which removes a
+    // render-blocking request (faster first paint on mobile). Turn off to serve it as a file.
+    'inline_css' => (bool) env('CMS_INLINE_CSS', true),
+
     // Custom header/footer scripts and custom JavaScript are only printed when this is true.
     // Turn it off on deployments where staff must not be able to inject scripts.
     'allow_custom_scripts' => (bool) env('CMS_ALLOW_CUSTOM_SCRIPTS', true),

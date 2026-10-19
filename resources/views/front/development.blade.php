@@ -10,7 +10,7 @@
             @endif
 
             @if ($milestones->isEmpty())
-                <p class="rounded-brand-lg bg-white p-12 text-center text-ink/60">Development updates will be published soon.</p>
+                <p class="rounded-brand-lg bg-white p-12 text-center text-ink/70">Development updates will be published soon.</p>
             @else
                 <div class="grid gap-10 lg:grid-cols-[340px_1fr]">
                     <aside class="lg:sticky lg:top-24 lg:self-start">
@@ -42,7 +42,7 @@
     </section>
 
     @if ($album && $album->activeImages->isNotEmpty())
-        <section class="bg-white py-16 sm:py-24">
+        <section data-defer class="bg-white py-16 sm:py-24">
             <div class="container-x">
                 <x-front.section-heading eyebrow="On-site Photos" heading="Development in Pictures" />
                 <div class="mt-12">

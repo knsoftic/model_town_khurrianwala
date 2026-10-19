@@ -1,7 +1,7 @@
-@props(['url' => null, 'light' => true])
+@props(['path' => null, 'light' => true])
 
-@if ($url)
-    <img src="{{ $url }}" alt="{{ setting('site_name') }}" {{ $attributes->merge(['class' => 'h-11 w-auto object-contain']) }}>
+@if ($path)
+    <img {{ img_attrs($path, height: 44) }} alt="{{ setting('site_name') }}" {{ $attributes->merge(['class' => 'h-11 w-auto object-contain']) }}>
 @else
     <span {{ $attributes->merge(['class' => 'flex items-center gap-3']) }}>
         <span class="grid size-11 shrink-0 place-items-center rounded-brand-sm bg-accent text-primary shadow-sm ring-1 ring-white/20">

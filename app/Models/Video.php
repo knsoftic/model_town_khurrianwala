@@ -35,6 +35,6 @@ class Video extends Model
 
     public function thumbnailUrl(): ?string
     {
-        return media_url($this->thumbnail) ?? VideoEmbed::thumbnailUrl($this->url);
+        return $this->thumbnail ? img_url($this->thumbnail, 960) : VideoEmbed::thumbnailUrl($this->url);
     }
 }

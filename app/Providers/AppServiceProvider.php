@@ -6,6 +6,7 @@ use App\Models\Permission;
 use App\Models\User;
 use App\Services\HtmlSanitizer;
 use App\Services\InstallmentCalculator;
+use App\Services\ResponsiveImages;
 use App\Services\SettingsService;
 use App\Services\ThemeService;
 use App\View\Composers\AdminLayoutComposer;
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ThemeService::class);
         $this->app->singleton(HtmlSanitizer::class);
         $this->app->singleton(InstallmentCalculator::class);
+        $this->app->singleton(ResponsiveImages::class);
     }
 
     /**

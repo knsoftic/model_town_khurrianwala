@@ -4,12 +4,13 @@
     $eyebrow ??= $page?->eyebrow;
     $heading ??= $page?->heading ?? $page?->name;
     $subheading ??= $page?->subheading;
-    $image = media_url($image ?? $page?->banner_image);
+    $imagePath = $image ?? $page?->banner_image;
 @endphp
 
 <section class="relative isolate overflow-hidden bg-primary text-white">
-    @if ($image)
-        <img src="{{ $image }}" alt="" class="absolute inset-0 -z-20 size-full object-cover" fetchpriority="high">
+    @if ($imagePath)
+        @push('head'){{ img_preload($imagePath, '100vw', [640, 960, 1280, 1920]) }}@endpush
+        <img {{ img_attrs($imagePath, '100vw', [640, 960, 1280, 1920]) }} alt="" class="absolute inset-0 -z-20 size-full object-cover" fetchpriority="high">
     @endif
     <div class="absolute inset-0 -z-10 bg-gradient-to-r from-primary via-primary/90 to-primary/55"></div>
     <div class="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-primary/60 to-transparent"></div>
@@ -29,7 +30,7 @@
 
         <div class="max-w-3xl">
             @if ($eyebrow)
-                <span class="eyebrow">{{ $eyebrow }}</span>
+                <span class="eyebrow eyebrow-on-dark">{{ $eyebrow }}</span>
             @endif
             @if ($heading)
                 <h1 class="mt-3 text-4xl leading-[1.1] font-semibold sm:text-5xl">{{ $heading }}</h1>

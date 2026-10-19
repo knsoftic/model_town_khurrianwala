@@ -17,6 +17,7 @@
     --brand-primary: #0b1f3a;
     --brand-secondary: #ffffff;
     --brand-accent: #c9a54c;
+    --brand-accent-ink: #816a31;
     --brand-bg: #f7f6f2;
     --brand-text: #1e293b;
     --brand-button: #c9a54c;
@@ -35,6 +36,7 @@
     --color-primary: var(--brand-primary);
     --color-secondary: var(--brand-secondary);
     --color-accent: var(--brand-accent);
+    --color-accent-ink: var(--brand-accent-ink);
     --color-surface: var(--brand-bg);
     --color-ink: var(--brand-text);
     --color-btn: var(--brand-button);
@@ -55,6 +57,8 @@
     --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -8px rgb(15 23 42 / 0.12);
     --shadow-lift: 0 2px 4px rgb(15 23 42 / 0.04), 0 24px 48px -16px rgb(15 23 42 / 0.25);
     --animate-fade-up: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    /* Movement only, no fade: above-the-fold text is visible from the first paint. */
+    --animate-rise: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 
     @keyframes fade-up {
         from {
@@ -63,6 +67,15 @@
         }
         to {
             opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes rise {
+        from {
+            transform: translateY(14px);
+        }
+        to {
             transform: none;
         }
     }
@@ -99,6 +112,14 @@
 
     [x-cloak] {
         display: none !important;
+    }
+
+    /* Homepage sections below the first (and blocks marked data-defer) are only laid out and
+       painted once they scroll near the screen, which keeps the first paint fast on phones. */
+    .home-flow > section:not(:first-child),
+    [data-defer] {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 900px;
     }
 
     /* Let grid columns shrink below their content so nothing pushes the page sideways on phones. */
@@ -142,11 +163,15 @@
     }
 
     .btn-whatsapp {
-        @apply btn bg-[#25D366] text-white hover:bg-[#1ebe5b];
+        @apply btn bg-[#15803d] text-white hover:bg-[#166534];
     }
 
     .eyebrow {
-        @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.22em] text-accent uppercase;
+        @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.22em] text-accent-ink uppercase;
+    }
+
+    .eyebrow-on-dark {
+        @apply text-accent;
     }
 
     .eyebrow::before {

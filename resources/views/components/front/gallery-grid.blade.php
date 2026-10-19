@@ -3,10 +3,10 @@
 {{-- Masonry grid + category filters + lightbox with zoom. --}}
 <div x-data="gallery" @keydown.window="if (open) { if ($event.key === 'Escape') close(); if ($event.key === 'ArrowRight') step(1); if ($event.key === 'ArrowLeft') step(-1); }">
     @if ($albums && $albums->count() > 1)
-        <div class="scrollbar-none -mx-4 mb-10 flex gap-2 overflow-x-auto px-4 sm:flex-wrap sm:justify-center" role="tablist" aria-label="Gallery categories">
-            <button type="button" @click="filter = 'all'" :class="filter === 'all' ? 'bg-primary text-white' : 'bg-white text-primary ring-1 ring-primary/10 hover:ring-accent'" class="shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition">All</button>
+        <div class="scrollbar-none -mx-4 mb-10 flex gap-2 overflow-x-auto px-4 sm:flex-wrap sm:justify-center" role="group" aria-label="Gallery categories">
+            <button type="button" @click="filter = 'all'" :aria-pressed="filter === 'all'" :class="filter === 'all' ? 'bg-primary text-white' : 'bg-white text-primary ring-1 ring-primary/10 hover:ring-accent'" class="shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition">All</button>
             @foreach ($albums as $album)
-                <button type="button" @click="filter = @js($album->slug)" :class="filter === @js($album->slug) ? 'bg-primary text-white' : 'bg-white text-primary ring-1 ring-primary/10 hover:ring-accent'" class="shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition">
+                <button type="button" @click="filter = @js($album->slug)" :aria-pressed="filter === @js($album->slug)" :class="filter === @js($album->slug) ? 'bg-primary text-white' : 'bg-white text-primary ring-1 ring-primary/10 hover:ring-accent'" class="shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition">
                     {{ $album->name }} <span class="ml-1 text-xs opacity-60">{{ $album->activeImages->count() }}</span>
                 </button>
             @endforeach
@@ -15,10 +15,10 @@
 
     <div class="columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4 [&>*]:mb-4">
         @foreach ($images as $i => $image)
-            <button type="button" data-gallery-item data-src="{{ media_url($image->path) }}" data-title="{{ $image->title }}" data-caption="{{ $image->caption }}" data-album="{{ $image->album?->slug }}"
+            <button type="button" data-gallery-item data-src="{{ img_url($image->path, 1920) }}" data-title="{{ $image->title }}" data-caption="{{ $image->caption }}" data-album="{{ $image->album?->slug }}"
                     x-show="visible(@js($image->album?->slug))" x-transition.opacity @click="show({{ $loop->index }})"
                     class="group relative block w-full break-inside-avoid overflow-hidden rounded-brand-lg bg-primary/5 text-left">
-                <img src="{{ media_url($image->path) }}" alt="{{ $image->title ?? $image->album?->name }}" loading="lazy" class="w-full transition duration-700 group-hover:scale-105">
+                <img {{ img_attrs($image->path, '(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw', [320, 480, 640, 960]) }} alt="{{ $image->title ?? $image->album?->name }}" loading="lazy" class="w-full transition duration-700 group-hover:scale-105">
                 <span class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/0 to-primary/0 opacity-0 transition duration-300 group-hover:opacity-100"></span>
                 <span class="absolute inset-x-0 bottom-0 flex translate-y-2 items-end justify-between gap-3 p-4 text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                     <span class="min-w-0">

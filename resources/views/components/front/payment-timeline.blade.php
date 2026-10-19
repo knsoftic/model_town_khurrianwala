@@ -28,21 +28,21 @@
                 <div class="flex-1 rounded-brand border border-primary/8 bg-white p-4 shadow-soft sm:p-5">
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div class="min-w-0">
-                            <p class="flex items-center gap-2 text-[11px] font-semibold tracking-wider text-accent uppercase">
+                            <p class="flex items-center gap-2 text-[11px] font-semibold tracking-wider text-accent-ink uppercase">
                                 <x-icon :name="$item->type->icon()" class="size-3.5" /> {{ $item->type->label() }}
                             </p>
-                            <h4 class="mt-1 font-sans text-base font-semibold text-primary sm:text-lg">{{ $item->title }}</h4>
+                            <h3 class="mt-1 font-sans text-base font-semibold text-primary sm:text-lg">{{ $item->title }}</h3>
                             @if ($item->due_label)
-                                <p class="mt-0.5 text-sm text-ink/60">{{ $item->due_label }}</p>
+                                <p class="mt-0.5 text-sm text-ink/70">{{ $item->due_label }}</p>
                             @endif
                             @if ($item->description && ! $compact)
-                                <p class="mt-1.5 text-sm text-ink/60">{{ $item->description }}</p>
+                                <p class="mt-1.5 text-sm text-ink/70">{{ $item->description }}</p>
                             @endif
                         </div>
                         <div class="shrink-0 sm:text-right">
                             <p class="font-heading text-xl font-semibold text-primary sm:text-2xl">{{ money($item->amount) }}</p>
                             @if ($item->occurrences > 1)
-                                <p class="text-xs font-medium text-ink/60">× {{ $item->occurrences }} {{ str($unit($item->type))->plural($item->occurrences) }} = <span class="text-primary">{{ money($stage['line_total']) }}</span></p>
+                                <p class="text-xs font-medium text-ink/70">× {{ $item->occurrences }} {{ str($unit($item->type))->plural($item->occurrences) }} = <span class="text-primary">{{ money($stage['line_total']) }}</span></p>
                             @endif
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                             <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-primary/6">
                                 <div class="h-full rounded-full bg-gradient-to-r from-accent/70 to-accent" style="width: {{ min(100, $stage['cumulative_percent']) }}%"></div>
                             </div>
-                            <span class="shrink-0 text-[11px] font-semibold text-ink/55">{{ rtrim(rtrim(number_format($stage['percent'], 1), '0'), '.') }}% · {{ rtrim(rtrim(number_format($stage['cumulative_percent'], 1), '0'), '.') }}% paid</span>
+                            <span class="shrink-0 text-[11px] font-semibold text-ink/70">{{ rtrim(rtrim(number_format($stage['percent'], 1), '0'), '.') }}% · {{ rtrim(rtrim(number_format($stage['cumulative_percent'], 1), '0'), '.') }}% paid</span>
                         </div>
                     @endunless
                 </div>

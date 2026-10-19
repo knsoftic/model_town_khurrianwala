@@ -17,7 +17,7 @@
 <article {{ $attributes->class(['group flex flex-col overflow-hidden rounded-brand-lg border border-primary/8 bg-white shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-lift']) }}>
     <a href="{{ route('plots.show', $plot) }}" class="relative block aspect-[4/3] overflow-hidden bg-surface">
         @if ($plot->image)
-            <img src="{{ media_url($plot->image) }}" alt="{{ $plot->title }}" loading="lazy" class="size-full object-cover transition duration-700 group-hover:scale-105">
+            <img {{ img_attrs($plot->image, '(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw', [320, 480, 640, 960]) }} alt="{{ $plot->title }}" loading="lazy" class="size-full object-cover transition duration-700 group-hover:scale-105">
         @endif
         <div class="absolute inset-x-0 top-0 flex items-start justify-between p-3.5">
             <x-front.status-badge :status="$plot->status" class="bg-white! shadow-sm" />
@@ -36,7 +36,7 @@
         <div class="flex items-start justify-between gap-3">
             <div>
                 <h3 class="text-2xl font-semibold tracking-tight text-primary uppercase">{{ $plot->size_label }}</h3>
-                <p class="mt-0.5 text-sm text-ink/60">{{ $plot->title }}@if ($plot->dimensions) · {{ $plot->dimensions }} ft @endif</p>
+                <p class="mt-0.5 text-sm text-ink/70">{{ $plot->title }}@if ($plot->dimensions) · {{ $plot->dimensions }} ft @endif</p>
             </div>
             @if ($whatsapp)
                 <a href="{{ $whatsapp }}" target="_blank" rel="noopener" class="grid size-10 shrink-0 place-items-center rounded-full bg-[#25D366]/10 text-[#1a9e4b] transition hover:bg-[#25D366] hover:text-white" aria-label="Ask about {{ $plot->size_label }} on WhatsApp">
@@ -46,15 +46,15 @@
         </div>
 
         <div class="mt-5 rounded-brand bg-surface px-4 py-3.5">
-            <p class="text-[11px] font-semibold tracking-wider text-ink/50 uppercase">Starting From</p>
+            <p class="text-[11px] font-semibold tracking-wider text-ink/70 uppercase">Starting From</p>
             <p class="mt-0.5 font-heading text-2xl font-semibold text-primary">{{ money($plot->displayPrice()) }}</p>
         </div>
 
         <dl class="mt-4 divide-y divide-primary/6 text-sm">
             @foreach ($rows as [$label, $amount, $suffix])
                 <div class="flex items-center justify-between gap-3 py-2.5">
-                    <dt class="text-ink/60">{{ $label }}</dt>
-                    <dd class="text-right font-semibold text-primary">{{ money($amount) }}@if ($suffix)<span class="ml-1 text-xs font-medium text-ink/50">{{ $suffix }}</span>@endif</dd>
+                    <dt class="text-ink/70">{{ $label }}</dt>
+                    <dd class="text-right font-semibold text-primary">{{ money($amount) }}@if ($suffix)<span class="ml-1 text-xs font-medium text-ink/70">{{ $suffix }}</span>@endif</dd>
                 </div>
             @endforeach
         </dl>
@@ -64,7 +64,7 @@
             @if ($plot->isBookable())
                 <a href="{{ route('book-plot', ['plot' => $plot->slug, 'plan' => $plan?->slug]) }}" class="btn-primary !px-3 text-[13px]">Book This Plot</a>
             @else
-                <span class="btn cursor-not-allowed bg-primary/5 !px-3 text-[13px] text-ink/50">{{ $plot->status->label() }}</span>
+                <span class="btn cursor-not-allowed bg-primary/5 !px-3 text-[13px] text-ink/70">{{ $plot->status->label() }}</span>
             @endif
             <a href="{{ route('plots.show', $plot) }}" class="col-span-2 inline-flex items-center justify-center gap-1.5 py-1.5 text-[13px] font-semibold text-primary/80 transition hover:text-accent">
                 Get Details <x-icon name="arrow-right" class="size-4 transition group-hover:translate-x-0.5" />

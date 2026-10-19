@@ -20,10 +20,10 @@
                 <a @if ($href) href="{{ $href }}" @if (str_starts_with($href, 'http')) target="_blank" rel="noopener" @endif @endif
                    class="group rounded-brand-lg border border-primary/8 bg-white p-6 shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift">
                     <span class="grid size-12 place-items-center rounded-full bg-accent/15 text-accent transition group-hover:bg-accent group-hover:text-primary"><x-icon :name="$icon" class="size-5" /></span>
-                    <p class="mt-4 text-xs font-semibold tracking-wider text-ink/50 uppercase">{{ $title }}</p>
+                    <p class="mt-4 text-xs font-semibold tracking-wider text-ink/70 uppercase">{{ $title }}</p>
                     <p class="mt-1 font-semibold break-words text-primary">{{ $value }}</p>
                     @if ($extra)
-                        <p class="mt-1 text-sm text-ink/55">{{ $extra }}</p>
+                        <p class="mt-1 text-sm text-ink/70">{{ $extra }}</p>
                     @endif
                 </a>
             @endforeach
@@ -109,7 +109,7 @@
         </div>
     </section>
 
-    <section class="bg-white py-16 sm:py-24">
+    <section data-defer class="bg-white py-16 sm:py-24">
         <div class="container-x grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <x-front.section-heading eyebrow="Plot Inquiry" :heading="setting('lead_form_title')" :subheading="setting('lead_form_text')" align="left" />
             <div class="card p-6 sm:p-8">

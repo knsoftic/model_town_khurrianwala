@@ -5,7 +5,7 @@
                 <x-front.section-heading :eyebrow="$section->eyebrow" :heading="$section->heading" :subheading="$section->subheading" align="left" />
                 <div class="mt-8 rounded-brand-lg bg-surface p-6">
                     <p class="font-semibold text-primary">Still have questions?</p>
-                    <p class="mt-1 text-sm text-ink/60">Our sales team is happy to help you choose the right plot and plan.</p>
+                    <p class="mt-1 text-sm text-ink/70">Our sales team is happy to help you choose the right plot and plan.</p>
                     <div class="mt-5 flex flex-wrap gap-2.5">
                         <button type="button" @click="$store.callback.show()" class="btn-dark !py-2.5"><x-icon name="phone-call" class="size-4" /> Request Callback</button>
                         @if (whatsapp_url())

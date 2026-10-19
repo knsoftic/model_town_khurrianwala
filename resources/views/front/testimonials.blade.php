@@ -20,7 +20,7 @@
     <section class="py-16 sm:py-24">
         <div class="container-x">
             @if ($testimonials->isEmpty())
-                <p class="rounded-brand-lg bg-white p-12 text-center text-ink/60">Client reviews will be published soon.</p>
+                <p class="rounded-brand-lg bg-white p-12 text-center text-ink/70">Client reviews will be published soon.</p>
             @else
                 <div class="columns-1 gap-6 md:columns-2 xl:columns-3 [&>*]:mb-6">
                     @foreach ($testimonials as $testimonial)

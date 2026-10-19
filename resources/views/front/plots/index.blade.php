@@ -21,7 +21,7 @@
             @endif
 
             @if ($plots->isEmpty())
-                <p class="rounded-brand-lg bg-white p-12 text-center text-ink/60">Plot sizes will be announced soon. Please contact our sales team for details.</p>
+                <p class="rounded-brand-lg bg-white p-12 text-center text-ink/70">Plot sizes will be announced soon. Please contact our sales team for details.</p>
             @else
                 <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
                     @foreach ($plots as $plot)
@@ -36,7 +36,7 @@
 
     {{-- Side-by-side comparison --}}
     @if ($plots->count() > 1)
-        <section class="bg-white py-16 sm:py-24">
+        <section data-defer class="bg-white py-16 sm:py-24">
             <div class="container-x">
                 <x-front.section-heading eyebrow="Compare" heading="Compare Plot Sizes at a Glance" subheading="Prices and payment milestones for every plot size, side by side." />
                 <div class="mt-12 overflow-x-auto rounded-brand-lg border border-primary/8 shadow-soft">
@@ -58,7 +58,7 @@
                                     <td class="px-5 py-4"><a href="{{ route('plots.show', $plot) }}" class="font-semibold text-primary hover:text-accent">{{ $plot->size_label }}</a></td>
                                     <td class="px-5 py-4 font-semibold text-primary">{{ money($plot->displayPrice()) }}</td>
                                     <td class="px-5 py-4">{{ money($plot->booking_amount) }}</td>
-                                    <td class="px-5 py-4">{{ money($plot->installment_amount) }} <span class="text-xs text-ink/50">{{ $plot->frequencySuffix() }}</span></td>
+                                    <td class="px-5 py-4">{{ money($plot->installment_amount) }} <span class="text-xs text-ink/70">{{ $plot->frequencySuffix() }}</span></td>
                                     <td class="px-5 py-4">{{ money($plot->after_6_months_payment) }} / {{ money($plot->after_12_months_payment) }}</td>
                                     <td class="px-5 py-4">{{ money($plot->end_payment) }}</td>
                                     <td class="px-5 py-4"><x-front.status-badge :status="$plot->status" /></td>
@@ -68,7 +68,7 @@
                     </table>
                 </div>
                 @if ($plots->contains('is_demo_price', true))
-                    <p class="mt-4 text-center text-xs text-ink/50">Prices marked "Demo Price" are sample values for preview only.</p>
+                    <p class="mt-4 text-center text-xs text-ink/70">Prices marked "Demo Price" are sample values for preview only.</p>
                 @endif
             </div>
         </section>

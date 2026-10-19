@@ -1,6 +1,7 @@
 @php
     $type = $section->setting('background_type', 'image');
-    $image = media_url($section->setting('background_image'));
+    $imagePath = $section->setting('background_image');
+    $image = img_url($imagePath, 1280);
     $video = media_url($section->setting('background_video')) ?? $section->setting('background_video_url');
     $overlay = max(0, min(95, (int) $section->setting('overlay_opacity', 55))) / 100;
     $height = max(50, min(100, (int) $section->setting('height', 92)));
@@ -17,7 +18,10 @@
             <source src="{{ $video }}">
         </video>
     @elseif ($image && $type !== 'gradient')
-        <img src="{{ $image }}" alt="" class="absolute inset-0 -z-20 size-full object-cover" fetchpriority="high">
+        @if ($first)
+            @push('head'){{ img_preload($imagePath, '100vw', [640, 960, 1280, 1920]) }}@endpush
+        @endif
+        <img {{ img_attrs($imagePath, '100vw', [640, 960, 1280, 1920]) }} alt="" class="absolute inset-0 -z-20 size-full object-cover" fetchpriority="high">
     @endif
     <div class="absolute inset-0 -z-10 bg-primary" style="opacity: {{ $overlay }}"></div>
     <div class="absolute inset-0 -z-10 bg-gradient-to-t from-primary via-transparent to-primary/40"></div>
@@ -33,27 +37,27 @@
             'ml-auto text-right' => $align === 'right',
         ])>
             @if ($section->setting('badge_text'))
-                <span class="inline-flex animate-fade-up items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-accent backdrop-blur">
+                <span class="inline-flex animate-rise items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-accent backdrop-blur">
                     <span class="relative flex size-2"><span class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-75"></span><span class="relative inline-flex size-2 rounded-full bg-accent"></span></span>
                     {{ $section->setting('badge_text') }}
                 </span>
             @endif
 
             @if ($section->heading)
-                <h1 class="mt-6 animate-fade-up text-4xl leading-[1.05] font-semibold [animation-delay:80ms] sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
+                <h1 class="mt-6 animate-rise text-4xl leading-[1.05] font-semibold [animation-delay:80ms] sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
                     {{ $section->heading }}
                 </h1>
             @endif
 
             @if ($section->subheading)
-                <p class="mt-6 animate-fade-up text-lg font-medium text-accent [animation-delay:160ms] sm:text-xl">{{ $section->subheading }}</p>
+                <p class="mt-6 animate-rise text-lg font-medium text-accent [animation-delay:160ms] sm:text-xl">{{ $section->subheading }}</p>
             @endif
 
             @if ($section->description)
-                <p @class(['mt-4 max-w-2xl animate-fade-up text-base leading-relaxed text-white/75 [animation-delay:220ms] sm:text-lg', 'mx-auto' => $align === 'center', 'ml-auto' => $align === 'right'])>{{ $section->description }}</p>
+                <p @class(['mt-4 max-w-2xl animate-rise text-base leading-relaxed text-white/75 [animation-delay:220ms] sm:text-lg', 'mx-auto' => $align === 'center', 'ml-auto' => $align === 'right'])>{{ $section->description }}</p>
             @endif
 
-            <div @class(['mt-9 flex animate-fade-up flex-wrap gap-3 [animation-delay:300ms]', 'justify-center' => $align === 'center', 'justify-end' => $align === 'right'])>
+            <div @class(['mt-9 flex animate-rise flex-wrap gap-3 [animation-delay:300ms]', 'justify-center' => $align === 'center', 'justify-end' => $align === 'right'])>
                 @if ($section->setting('primary_button_text'))
                     <a href="{{ url($section->setting('primary_button_url', '/plots')) }}" class="btn-primary !px-7 !py-4 text-[15px]">
                         {{ $section->setting('primary_button_text') }} <x-icon name="arrow-right" class="size-4" />

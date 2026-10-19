@@ -14,7 +14,7 @@
             @endif
 
             @if ($images->isEmpty())
-                <p class="rounded-brand-lg bg-white p-12 text-center text-ink/60">Photos will be added soon.</p>
+                <p class="rounded-brand-lg bg-white p-12 text-center text-ink/70">Photos will be added soon.</p>
             @else
                 <x-front.gallery-grid :images="$images" :albums="$albums" />
             @endif
@@ -22,7 +22,7 @@
     </section>
 
     @if ($videos->isNotEmpty())
-        <section class="bg-white py-16 sm:py-24">
+        <section data-defer class="bg-white py-16 sm:py-24">
             <div class="container-x">
                 <x-front.section-heading eyebrow="Videos" heading="Discover Our Project" />
                 <div @class(['mt-12 grid gap-6', 'md:grid-cols-2' => $videos->count() > 1])>

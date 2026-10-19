@@ -70,6 +70,7 @@ class MediaUploader
     {
         if ($path && str_starts_with($path, 'uploads/')) {
             Storage::disk(self::DISK)->delete($path);
+            app(ResponsiveImages::class)->forget($path);
         }
     }
 

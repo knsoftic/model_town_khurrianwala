@@ -6,7 +6,7 @@
     <section class="py-16 sm:py-24" x-data="{ category: 'all' }">
         <div class="container-x grid gap-10 lg:grid-cols-[260px_1fr]">
             <aside class="lg:sticky lg:top-24 lg:self-start">
-                <p class="mb-3 text-xs font-semibold tracking-wider text-ink/50 uppercase">Categories</p>
+                <p class="mb-3 text-xs font-semibold tracking-wider text-ink/70 uppercase">Categories</p>
                 <div class="scrollbar-none -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-col lg:px-0">
                     <button type="button" @click="category = 'all'" :class="category === 'all' ? 'bg-primary text-white' : 'bg-white text-primary ring-1 ring-primary/10'" class="shrink-0 rounded-brand px-4 py-2.5 text-left text-sm font-semibold transition">All Questions</button>
                     @foreach ($groups as $name => $items)
@@ -33,7 +33,7 @@
                         <x-front.faq-list :faqs="$items" />
                     </div>
                 @empty
-                    <p class="rounded-brand-lg bg-white p-12 text-center text-ink/60">FAQs will be added soon.</p>
+                    <p class="rounded-brand-lg bg-white p-12 text-center text-ink/70">FAQs will be added soon.</p>
                 @endforelse
             </div>
         </div>

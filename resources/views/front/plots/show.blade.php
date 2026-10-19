@@ -57,14 +57,14 @@
                 <div x-data="{ active: 0 }">
                     <div class="overflow-hidden rounded-brand-lg bg-white shadow-soft">
                         @foreach ($gallery as $i => $path)
-                            <img x-show="active === {{ $i }}" @if ($i) x-cloak @endif src="{{ media_url($path) }}" alt="{{ $plot->title }} — image {{ $i + 1 }}" class="aspect-[16/10] w-full object-cover" @if ($i) loading="lazy" @endif>
+                            <img x-show="active === {{ $i }}" @if ($i) x-cloak @endif {{ img_attrs($path, '(min-width: 1024px) 60vw, 100vw', [640, 960, 1280, 1600]) }} alt="{{ $plot->title }} — image {{ $i + 1 }}" class="aspect-[16/10] w-full object-cover" @if ($i) loading="lazy" @endif>
                         @endforeach
                     </div>
                     @if ($gallery->count() > 1)
                         <div class="scrollbar-none mt-3 flex gap-3 overflow-x-auto">
                             @foreach ($gallery as $i => $path)
                                 <button type="button" @click="active = {{ $i }}" :class="active === {{ $i }} ? 'ring-2 ring-accent' : 'opacity-70 hover:opacity-100'" class="shrink-0 overflow-hidden rounded-brand-sm transition">
-                                    <img src="{{ media_url($path) }}" alt="" loading="lazy" class="h-16 w-24 object-cover">
+                                    <img {{ img_attrs($path, '96px', [96, 192, 320]) }} alt="" loading="lazy" class="h-16 w-24 object-cover">
                                 </button>
                             @endforeach
                         </div>
@@ -77,17 +77,17 @@
                 <h2 class="text-2xl font-semibold text-primary sm:text-3xl">Price &amp; Payment Details</h2>
                 <dl class="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                     @foreach ($facts as [$label, $value, $icon])
-                        <div class="flex items-center gap-3.5 rounded-brand border border-primary/8 bg-white p-4">
-                            <span class="grid size-10 shrink-0 place-items-center rounded-brand-sm bg-accent/12 text-accent"><x-icon :name="$icon" class="size-5" /></span>
-                            <div class="min-w-0">
-                                <dt class="text-xs text-ink/55">{{ $label }}</dt>
-                                <dd class="truncate font-semibold text-primary">{{ $value }}</dd>
-                            </div>
+                        <div class="relative min-w-0 rounded-brand border border-primary/8 bg-white py-4 pr-4 pl-[4.375rem]">
+                            <dt class="text-xs text-ink/70">
+                                <span class="absolute top-1/2 left-4 grid size-10 -translate-y-1/2 place-items-center rounded-brand-sm bg-accent/12 text-accent"><x-icon :name="$icon" class="size-5" /></span>
+                                {{ $label }}
+                            </dt>
+                            <dd class="truncate font-semibold text-primary">{{ $value }}</dd>
                         </div>
                     @endforeach
                 </dl>
                 @if ($plot->price_note)
-                    <p class="mt-3 text-xs text-ink/50">{{ $plot->price_note }}</p>
+                    <p class="mt-3 text-xs text-ink/70">{{ $plot->price_note }}</p>
                 @endif
             </section>
 
@@ -100,7 +100,7 @@
 
             {{-- Installment plans --}}
             @if ($plans->isNotEmpty())
-                <section id="payment-plan" class="scroll-mt-28" x-data="{ plan: 0 }">
+                <section data-defer id="payment-plan" class="scroll-mt-28" x-data="{ plan: 0 }">
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                         <div>
                             <span class="eyebrow">Payment Schedule</span>
@@ -122,7 +122,7 @@
                             @endif
                             <x-front.payment-timeline :plan="$plan" />
                             @if ($plan->terms)
-                                <p class="mt-4 flex gap-2 text-xs text-ink/55"><x-icon name="info" class="size-4 text-accent" /> {{ $plan->terms }}</p>
+                                <p class="mt-4 flex gap-2 text-xs text-ink/70"><x-icon name="info" class="size-4 text-accent" /> {{ $plan->terms }}</p>
                             @endif
                             @if ($plot->isBookable())
                                 <a href="{{ route('book-plot', ['plot' => $plot->slug, 'plan' => $plan->slug]) }}" class="btn-primary mt-6 !px-7">Book with {{ $plan->name }} <x-icon name="arrow-right" class="size-4" /></a>
@@ -131,7 +131,7 @@
                     @endforeach
                 </section>
 
-                <section>
+                <section data-defer>
                     <h2 class="text-2xl font-semibold text-primary sm:text-3xl">Payment Calculator</h2>
                     <x-front.calculator class="mt-6 !shadow-soft ring-1 ring-primary/8" :initial="$plot->slug" />
                 </section>
@@ -140,12 +140,12 @@
             {{-- Location --}}
             @if ($plot->location)
                 @php($map = $plot->location->mapEmbedSrc())
-                <section class="overflow-hidden rounded-brand-lg border border-primary/8 bg-white shadow-soft">
+                <section data-defer class="overflow-hidden rounded-brand-lg border border-primary/8 bg-white shadow-soft">
                     <div class="grid md:grid-cols-2">
                         <div class="p-6 sm:p-8">
                             <span class="eyebrow">Location</span>
                             <h2 class="mt-2 text-2xl font-semibold text-primary">{{ $plot->location->name }}</h2>
-                            <p class="mt-2 text-sm text-ink/60">{{ $plot->location->fullAddress() }}</p>
+                            <p class="mt-2 text-sm text-ink/70">{{ $plot->location->fullAddress() }}</p>
                             <ul class="mt-5 space-y-2.5 text-sm">
                                 @foreach ($plot->location->distances() as $distance)
                                     <li class="flex items-center justify-between gap-3 border-b border-primary/6 pb-2.5"><span class="flex items-center gap-2 text-ink/70"><x-icon :name="$distance['icon']" class="size-4 text-accent" /> {{ $distance['label'] }}</span><span class="font-semibold text-primary">{{ $distance['value'] }}</span></li>
@@ -161,7 +161,7 @@
             @endif
 
             @if ($features->isNotEmpty())
-                <section>
+                <section data-defer>
                     <h2 class="text-2xl font-semibold text-primary sm:text-3xl">Community Features</h2>
                     <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
                         @foreach ($features as $feature)
@@ -175,7 +175,7 @@
             @endif
 
             @if ($testimonials->isNotEmpty())
-                <section>
+                <section data-defer>
                     <h2 class="text-2xl font-semibold text-primary sm:text-3xl">What {{ $plot->size_label }} Owners Say</h2>
                     <div class="mt-6 grid gap-5 md:grid-cols-2">
                         @foreach ($testimonials as $testimonial)
@@ -186,7 +186,7 @@
             @endif
 
             @if ($faqs->isNotEmpty())
-                <section>
+                <section data-defer>
                     <h2 class="text-2xl font-semibold text-primary sm:text-3xl">Frequently Asked Questions</h2>
                     <x-front.faq-list :faqs="$faqs" class="mt-6" />
                 </section>
@@ -218,7 +218,7 @@
     </div>
 
     @if ($related->isNotEmpty())
-        <section class="bg-white py-16 sm:py-20">
+        <section data-defer class="bg-white py-16 sm:py-20">
             <div class="container-x">
                 <x-front.section-heading eyebrow="More Options" heading="Other Plot Sizes" />
                 <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -44,7 +44,7 @@
         @if ($showAbout)
             <div class="lg:col-span-4">
                 <a href="{{ route('home') }}" class="inline-block text-white">
-                    <x-front.logo :url="$footerLogoUrl" />
+                    <x-front.logo :path="$footerLogoPath" />
                 </a>
                 @if (setting('footer_description'))
                     <p class="mt-5 max-w-sm text-sm leading-relaxed">{{ setting('footer_description') }}</p>
@@ -92,19 +92,19 @@
                         <li class="flex gap-3"><x-icon name="map-pin" class="mt-0.5 size-4 text-accent" /><span>{{ setting('office_address') }}</span></li>
                     @endif
                     @if (setting('phone'))
-                        <li class="flex gap-3"><x-icon name="phone" class="mt-0.5 size-4 text-accent" />
-                            <span><a href="{{ tel_url(setting('phone')) }}" class="hover:text-accent">{{ setting('phone') }}</a>
-                                @if (setting('phone_secondary'))<br><a href="{{ tel_url(setting('phone_secondary')) }}" class="hover:text-accent">{{ setting('phone_secondary') }}</a>@endif
+                        <li class="flex gap-3"><x-icon name="phone" class="mt-1 size-4 text-accent" />
+                            <span class="flex flex-col items-start"><a href="{{ tel_url(setting('phone')) }}" class="inline-flex min-h-6 items-center hover:text-accent">{{ setting('phone') }}</a>
+                                @if (setting('phone_secondary'))<a href="{{ tel_url(setting('phone_secondary')) }}" class="inline-flex min-h-6 items-center hover:text-accent">{{ setting('phone_secondary') }}</a>@endif
                             </span>
                         </li>
                     @endif
                     @if ($whatsapp)
-                        <li class="flex gap-3"><x-icon name="whatsapp" class="mt-0.5 size-4 text-accent" /><a href="{{ $whatsapp }}" target="_blank" rel="noopener" class="hover:text-accent">{{ setting('whatsapp_number') }}</a></li>
+                        <li class="flex gap-3"><x-icon name="whatsapp" class="mt-1 size-4 text-accent" /><a href="{{ $whatsapp }}" target="_blank" rel="noopener" class="inline-flex min-h-6 items-center hover:text-accent">{{ setting('whatsapp_number') }}</a></li>
                     @endif
                     @if (setting('email'))
-                        <li class="flex gap-3"><x-icon name="mail" class="mt-0.5 size-4 text-accent" />
-                            <span><a href="mailto:{{ setting('email') }}" class="hover:text-accent">{{ setting('email') }}</a>
-                                @if (setting('email_secondary'))<br><a href="mailto:{{ setting('email_secondary') }}" class="hover:text-accent">{{ setting('email_secondary') }}</a>@endif
+                        <li class="flex gap-3"><x-icon name="mail" class="mt-1 size-4 text-accent" />
+                            <span class="flex min-w-0 flex-col items-start"><a href="mailto:{{ setting('email') }}" class="inline-flex min-h-6 items-center hover:text-accent break-all">{{ setting('email') }}</a>
+                                @if (setting('email_secondary'))<a href="mailto:{{ setting('email_secondary') }}" class="inline-flex min-h-6 items-center hover:text-accent break-all">{{ setting('email_secondary') }}</a>@endif
                             </span>
                         </li>
                     @endif

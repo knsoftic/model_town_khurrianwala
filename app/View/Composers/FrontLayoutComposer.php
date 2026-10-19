@@ -56,8 +56,8 @@ class FrontLayoutComposer
             'customJs' => $allowScripts ? str_ireplace('</script', '<\/script', (string) $this->settings->get('custom_js', '')) : '',
             'analyticsId' => preg_match('/^(G|UA|GT|AW)-[A-Z0-9-]+$/i', (string) $this->settings->get('google_analytics_id')) ? $this->settings->get('google_analytics_id') : null,
             'siteVerification' => preg_match('/^[A-Za-z0-9_\-]+$/', (string) $this->settings->get('google_site_verification')) ? $this->settings->get('google_site_verification') : null,
-            'logoUrl' => media_url($this->settings->get('header_logo')) ?? media_url($this->settings->get('logo')),
-            'footerLogoUrl' => media_url($this->settings->get('footer_logo')) ?? media_url($this->settings->get('logo')),
+            'logoPath' => $this->settings->get('header_logo') ?: $this->settings->get('logo'),
+            'footerLogoPath' => $this->settings->get('footer_logo') ?: $this->settings->get('logo'),
             'faviconUrl' => media_url($this->settings->get('favicon')),
         ];
     }

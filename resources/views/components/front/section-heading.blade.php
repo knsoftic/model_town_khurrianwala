@@ -7,7 +7,7 @@
         'text-left' => $align === 'left',
     ]) }}>
         @if ($eyebrow)
-            <span @class(['eyebrow', 'justify-center' => $align === 'center'])>{{ $eyebrow }}</span>
+            <span @class(['eyebrow', 'eyebrow-on-dark' => $dark, 'justify-center' => $align === 'center'])>{{ $eyebrow }}</span>
         @endif
         @if ($heading)
             <h2 @class(['mt-3 text-3xl leading-tight font-semibold sm:text-4xl lg:text-[2.75rem]', 'text-white' => $dark, 'text-primary' => ! $dark])>{{ $heading }}</h2>

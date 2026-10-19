@@ -39,3 +39,4 @@ Route::middleware('throttle:forms')->group(function () {
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots']);
+Route::get('/llms.txt', [SitemapController::class, 'llms']);

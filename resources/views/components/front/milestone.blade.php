@@ -14,7 +14,7 @@
                 </div>
             </div>
             @if ($milestone->description)
-                <p class="mt-1 text-sm text-ink/60">{{ $milestone->description }}</p>
+                <p class="mt-1 text-sm text-ink/70">{{ $milestone->description }}</p>
             @endif
             <div class="mt-4 h-2.5 overflow-hidden rounded-full bg-primary/8" role="progressbar" aria-valuenow="{{ $milestone->percentage }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ $milestone->title }}">
                 <div class="h-full rounded-full bg-gradient-to-r from-accent/80 to-accent transition-[width] duration-[1600ms] ease-out"
@@ -23,6 +23,6 @@
         </div>
     </div>
     @if ($detailed && $milestone->image)
-        <img src="{{ media_url($milestone->image) }}" alt="{{ $milestone->title }}" loading="lazy" class="mt-5 aspect-[16/7] w-full rounded-brand object-cover">
+        <img {{ img_attrs($milestone->image, '(min-width: 1024px) 50vw, 100vw', [480, 768, 960, 1280]) }} alt="{{ $milestone->title }}" loading="lazy" class="mt-5 aspect-[16/7] w-full rounded-brand object-cover">
     @endif
 </div>

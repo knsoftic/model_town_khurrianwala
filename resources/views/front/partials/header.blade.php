@@ -62,7 +62,7 @@
         :class="solid ? 'bg-header! text-header-ink! shadow-[0_10px_30px_-14px_rgb(0_0_0/0.5)]' : 'bg-transparent'">
     <div class="container-x flex h-[76px] max-w-[1440px] items-center justify-between gap-5">
         <a href="{{ route('home') }}" class="shrink-0" aria-label="{{ setting('site_name') }} — Home">
-            <x-front.logo :url="$logoUrl" />
+            <x-front.logo :path="$logoPath" />
         </a>
 
         <nav class="hidden items-center gap-0.5 xl:flex" aria-label="Main">
@@ -119,7 +119,7 @@
                  x-transition:leave="transition duration-200 ease-in" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
                  class="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col overflow-y-auto bg-header text-header-ink shadow-2xl">
                 <div class="flex h-[76px] shrink-0 items-center justify-between border-b border-white/10 px-6">
-                    <x-front.logo :url="$logoUrl" />
+                    <x-front.logo :path="$logoPath" />
                     <button type="button" @click="menuOpen = false" class="grid size-10 place-items-center rounded-full border border-current/25" aria-label="Close menu">
                         <x-icon name="x" class="size-5" />
                     </button>

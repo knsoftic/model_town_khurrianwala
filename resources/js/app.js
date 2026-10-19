@@ -123,5 +123,29 @@ Alpine.directive('count-up', (el) => {
     observer.observe(el);
 });
 
+/*
+ * Homepage sections below the first, and blocks marked data-defer, start their
+ * components only when they come near the screen, so the first load runs a
+ * fraction of the JavaScript.
+ */
+if ('IntersectionObserver' in window) {
+    const wake = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                wake.unobserve(entry.target);
+                delete entry.target._x_ignore;
+                Alpine.initTree(entry.target);
+            });
+        },
+        { rootMargin: '600px 0px' },
+    );
+
+    document.querySelectorAll('.home-flow > section:not(:first-child), [data-defer]').forEach((section) => {
+        section._x_ignore = true;
+        wake.observe(section);
+    });
+}
+
 window.Alpine = Alpine;
 Alpine.start();

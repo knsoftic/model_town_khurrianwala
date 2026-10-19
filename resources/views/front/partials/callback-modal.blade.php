@@ -39,7 +39,7 @@
                     <p x-show="errors.phone" x-text="errors.phone" class="field-error"></p>
                 </div>
                 <div>
-                    <label for="cb-time" class="field-label">Best time to call <span class="text-ink/40">(optional)</span></label>
+                    <label for="cb-time" class="field-label">Best time to call <span class="text-ink/70">(optional)</span></label>
                     <select id="cb-time" name="preferred_time" class="field">
                         <option value="">Any time</option>
                         <option>Morning (9 AM – 12 PM)</option>

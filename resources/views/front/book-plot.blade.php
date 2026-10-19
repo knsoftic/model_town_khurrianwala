@@ -22,7 +22,7 @@
             @elseif ($plots->isEmpty())
                 <div class="mx-auto max-w-2xl rounded-brand-lg bg-white p-10 text-center shadow-soft">
                     <h2 class="text-2xl font-semibold text-primary">No plots are open for booking right now</h2>
-                    <p class="mt-3 text-ink/65">Please contact our sales team to join the waiting list.</p>
+                    <p class="mt-3 text-ink/70">Please contact our sales team to join the waiting list.</p>
                     <a href="{{ route('contact') }}" class="btn-primary mt-6">Contact Sales</a>
                 </div>
             @else
@@ -98,11 +98,11 @@
                                     </div>
                                     @if ($showCnic)
                                         <div>
-                                            <label for="b-cnic" class="field-label">CNIC @if ($requireCnic)<span class="text-rose-500">*</span>@else<span class="text-ink/40">(optional)</span>@endif</label>
+                                            <label for="b-cnic" class="field-label">CNIC @if ($requireCnic)<span class="text-rose-500">*</span>@else<span class="text-ink/70">(optional)</span>@endif</label>
                                             <input id="b-cnic" name="cnic" type="text" inputmode="numeric" placeholder="12345-1234567-1" maxlength="15" class="field" value="{{ old('cnic') }}" @if ($requireCnic) required @endif :aria-invalid="!!errors.cnic">
                                             <p x-show="errors.cnic" x-text="errors.cnic" class="field-error"></p>
                                             @error('cnic')<p class="field-error">{{ $message }}</p>@enderror
-                                            <p class="mt-1 text-[11px] text-ink/50">Stored encrypted and only visible to authorised staff.</p>
+                                            <p class="mt-1 text-[11px] text-ink/70">Stored encrypted and only visible to authorised staff.</p>
                                         </div>
                                     @endif
                                     <div>
@@ -161,11 +161,11 @@
                                                 <span class="grid size-7 shrink-0 place-items-center rounded-full bg-primary/8 text-[11px] font-semibold text-primary" x-text="String(index + 1).padStart(2, '0')"></span>
                                                 <div class="min-w-0 flex-1">
                                                     <p class="text-sm font-medium text-primary" x-text="item.title"></p>
-                                                    <p class="text-xs text-ink/55" x-text="item.due_label"></p>
+                                                    <p class="text-xs text-ink/70" x-text="item.due_label"></p>
                                                 </div>
                                                 <div class="text-right">
                                                     <p class="text-sm font-semibold text-primary" x-text="money(item.amount)"></p>
-                                                    <p class="text-[11px] text-ink/50" x-text="occurrenceLabel(item)"></p>
+                                                    <p class="text-[11px] text-ink/70" x-text="occurrenceLabel(item)"></p>
                                                 </div>
                                             </li>
                                         </template>
@@ -174,7 +174,7 @@
                                         <span class="text-sm font-semibold text-ink/70">Total</span>
                                         <span class="font-heading text-xl font-semibold text-primary" x-text="money(plan.total_price)"></span>
                                     </div>
-                                    <p x-show="plot.is_demo_price" class="mt-3 text-center text-[11px] text-ink/50">Demo price — for preview only</p>
+                                    <p x-show="plot.is_demo_price" class="mt-3 text-center text-[11px] text-ink/70">Demo price — for preview only</p>
                                 </div>
                             </template>
                         </div>

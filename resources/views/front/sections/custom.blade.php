@@ -1,5 +1,5 @@
 @php
-    $image = media_url($section->setting('image'));
+    $image = $section->setting('image');
     $layout = $section->setting('layout', 'image_right');
     $dark = $section->setting('background') === 'dark';
 @endphp
@@ -18,7 +18,7 @@
             @endif
         </div>
         @if ($image && $layout !== 'text_only')
-            <img src="{{ $image }}" alt="{{ $section->heading }}" loading="lazy" @class(['w-full rounded-brand-lg object-cover shadow-lift', 'lg:order-1' => $layout === 'image_left'])>
+            <img {{ img_attrs($image, '(min-width: 1024px) 50vw, 100vw', [480, 768, 960, 1280]) }} alt="{{ $section->heading }}" loading="lazy" @class(['w-full rounded-brand-lg object-cover shadow-lift', 'lg:order-1' => $layout === 'image_left'])>
         @endif
     </div>
 </section>

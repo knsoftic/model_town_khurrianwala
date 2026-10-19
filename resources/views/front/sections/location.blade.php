@@ -51,7 +51,7 @@
                     @if ($map)
                         <iframe src="{{ $map }}" title="Map — {{ $location->name }}" class="aspect-[4/3] w-full" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
                     @elseif ($location->image)
-                        <img src="{{ media_url($location->image) }}" alt="{{ $location->name }}" loading="lazy" class="aspect-[4/3] w-full object-cover">
+                        <img {{ img_attrs($location->image, '(min-width: 1024px) 50vw, 100vw', [480, 768, 960, 1280]) }} alt="{{ $location->name }}" loading="lazy" class="aspect-[4/3] w-full object-cover">
                     @endif
                 </div>
             </div>
