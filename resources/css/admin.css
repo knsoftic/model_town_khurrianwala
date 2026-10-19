@@ -1,0 +1,165 @@
+@import 'tailwindcss' source(none);
+@plugin '@tailwindcss/forms';
+
+@source '../views/admin';
+@source '../views/layouts/admin.blade.php';
+@source '../views/layouts/auth.blade.php';
+@source '../views/components/admin';
+@source '../views/components/icon.blade.php';
+@source '../js/admin';
+@source '../js/admin.js';
+@source '../../app/Enums';
+@source '../../app/Models/ActivityLog.php';
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --color-navy-950: #050f1e;
+    --color-navy-900: #0b1f3a;
+    --color-navy-800: #12305a;
+    --color-navy-700: #1b3f72;
+    --color-gold-50: #fbf7ec;
+    --color-gold-100: #f5ebcf;
+    --color-gold-300: #e2c886;
+    --color-gold-400: #d6b663;
+    --color-gold-500: #c9a54c;
+    --color-gold-600: #b08d36;
+    --color-gold-700: #8a6d27;
+    --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px -6px rgb(15 23 42 / 0.08);
+}
+
+@layer base {
+    body {
+        @apply bg-slate-100 font-sans text-slate-800 antialiased;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-gold-500;
+    }
+}
+
+@utility a-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold whitespace-nowrap transition select-none disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+@layer components {
+    .a-btn-primary {
+        @apply a-btn bg-navy-900 text-white shadow-sm hover:bg-navy-800;
+    }
+
+    .a-btn-gold {
+        @apply a-btn bg-gold-500 text-navy-900 shadow-sm hover:bg-gold-400;
+    }
+
+    .a-btn-secondary {
+        @apply a-btn border border-slate-300 bg-white text-slate-700 shadow-sm hover:bg-slate-50;
+    }
+
+    .a-btn-danger {
+        @apply a-btn bg-rose-600 text-white shadow-sm hover:bg-rose-500;
+    }
+
+    .a-btn-ghost {
+        @apply a-btn text-slate-600 hover:bg-slate-100 hover:text-slate-900;
+    }
+
+    .a-btn-sm {
+        @apply px-2.5 py-1.5 text-xs;
+    }
+
+    .a-icon-btn {
+        @apply inline-grid size-8 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900;
+    }
+
+    .a-card {
+        @apply rounded-xl border border-slate-200 bg-white shadow-card;
+    }
+
+    .a-label {
+        @apply mb-1.5 block text-sm font-medium text-slate-700;
+    }
+
+    .a-input {
+        @apply block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-900 shadow-xs placeholder:text-slate-400 focus:border-gold-500 focus:ring-gold-500/30;
+    }
+
+    .a-help {
+        @apply mt-1.5 text-xs text-slate-500;
+    }
+
+    .a-error {
+        @apply mt-1.5 text-xs font-medium text-rose-600;
+    }
+
+    .a-table {
+        @apply w-full text-left text-sm;
+    }
+
+    .a-table thead th {
+        @apply border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold tracking-wide whitespace-nowrap text-slate-500 uppercase;
+    }
+
+    .a-table tbody td {
+        @apply border-b border-slate-100 px-4 py-3 align-middle;
+    }
+
+    .a-table tbody tr:hover td {
+        @apply bg-slate-50/70;
+    }
+
+    .a-badge {
+        @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold whitespace-nowrap ring-1 ring-inset;
+    }
+
+    .a-nav-link {
+        @apply flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-slate-300 transition hover:bg-white/5 hover:text-white;
+    }
+
+    .a-nav-link.is-active {
+        @apply bg-white/10 text-white shadow-[inset_3px_0_0_var(--color-gold-500)];
+    }
+
+    .rich-content p + p,
+    .rich-content ul,
+    .rich-content ol,
+    .rich-content h2,
+    .rich-content h3,
+    .rich-content blockquote {
+        @apply mt-3;
+    }
+
+    .rich-content h2 {
+        @apply text-xl font-semibold;
+    }
+
+    .rich-content h3 {
+        @apply text-lg font-semibold;
+    }
+
+    .rich-content ul {
+        @apply list-disc pl-5;
+    }
+
+    .rich-content ol {
+        @apply list-decimal pl-5;
+    }
+
+    .rich-content a {
+        @apply text-sky-700 underline;
+    }
+
+    .rich-content blockquote {
+        @apply border-l-4 border-gold-500 pl-3 italic;
+    }
+
+    .sortable-ghost {
+        @apply opacity-40;
+    }
+
+    .sortable-chosen {
+        @apply shadow-lg;
+    }
+}
