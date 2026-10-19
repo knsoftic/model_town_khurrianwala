@@ -4,16 +4,23 @@
     $plans = $plot->activePlans;
     $gallery = collect([$plot->image])->filter()->merge($plot->images->pluck('path'))->values();
     $whatsapp = whatsapp_url(str_replace('{plot}', $plot->size_label, (string) setting('whatsapp_plot_message')));
+    // Labels follow the default plan's own stage names (e.g. "Confirmation", "Possession").
+    $stages = $plans->first()?->items ?? collect();
+    $stage = fn (string $type, string $fallback) => $stages->first(fn ($item) => $item->type?->value === $type)?->title ?: $fallback;
+    $sixMonthly = $plot->after_6_months_payment ? $stages->filter(fn ($item) => in_array($item->type?->value, ['after_6_months', 'after_12_months', 'after_18_months', 'after_24_months'], true)
+        && (float) $item->amount === (float) $plot->after_6_months_payment)->count() : 0;
     $facts = array_filter([
         ['Total Price', money($plot->total_price), 'banknote'],
         ['Lump-sum / Starting From', money($plot->starting_price), 'badge-percent'],
-        ['Booking Amount', money($plot->booking_amount), 'bookmark-check'],
-        ['Down / Advance Payment', money($plot->down_payment), 'wallet'],
+        [$stage('booking', 'Booking Amount'), money($plot->booking_amount), 'bookmark-check'],
+        [$stage('advance', 'Down / Advance Payment'), money($plot->down_payment), 'wallet'],
         ['Installment', $plot->installment_amount ? money($plot->installment_amount).' '.$plot->frequencySuffix() : null, 'calendar-days'],
         ['No. of Installments', $plot->installment_count ? $plot->installment_count.' ('.$plot->frequencyLabel().')' : null, 'list-ordered'],
-        ['After 6 Months', money($plot->after_6_months_payment), 'calendar-clock'],
+        $sixMonthly > 1
+            ? ['Every 6 Months', money($plot->after_6_months_payment).' × '.$sixMonthly, 'calendar-clock']
+            : ['After 6 Months', money($plot->after_6_months_payment), 'calendar-clock'],
         ['After 12 Months', money($plot->after_12_months_payment), 'calendar-clock'],
-        ['End Payment', money($plot->end_payment), 'key-round'],
+        [$stage('end_payment', 'End Payment'), money($plot->end_payment), 'key-round'],
         ['Development Charges', money($plot->development_charges), 'hard-hat'],
         ['Possession Charges', money($plot->possession_charges), 'house'],
         ['Dimensions', $plot->dimensions ? $plot->dimensions.' ft' : null, 'ruler'],

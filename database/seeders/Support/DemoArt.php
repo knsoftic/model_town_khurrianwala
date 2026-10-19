@@ -96,7 +96,7 @@ class DemoArt
     /**
      * Plot layout card: plot outline with dimensions, house footprint and label.
      */
-    public static function plotLayout(string $label, string $dimensions, string $area, string $tone = '#C9A54C'): string
+    public static function plotLayout(string $label, string $dimensions, string $area, string $tone = '#C9A54C', bool $measurements = true): string
     {
         [$w, $h] = array_map('intval', explode('x', strtolower(str_replace(["'", ' ', '×'], ['', '', 'x'], $dimensions))) + [1 => 50]);
         $maxW = 470;
@@ -125,13 +125,15 @@ class DemoArt
             .$trees
             ."<rect x='{$x}' y='{$y}' width='{$pw}' height='{$ph}' fill='#FFFFFF' stroke='".self::NAVY."' stroke-width='3' stroke-dasharray='10 7' rx='4'/>"
             ."<rect x='{$hx}' y='{$hy}' width='{$houseW}' height='{$houseH}' fill='{$tone}' fill-opacity='0.18' stroke='{$tone}' stroke-width='2.5' rx='3'/>"
-            ."<line x1='{$x}' y1='".($y - 22)."' x2='".($x + $pw)."' y2='".($y - 22)."' stroke='".self::NAVY."' stroke-width='1.5'/>"
-            ."<line x1='{$x}' y1='".($y - 30)."' x2='{$x}' y2='".($y - 14)."' stroke='".self::NAVY."' stroke-width='1.5'/>"
-            ."<line x1='".($x + $pw)."' y1='".($y - 30)."' x2='".($x + $pw)."' y2='".($y - 14)."' stroke='".self::NAVY."' stroke-width='1.5'/>"
-            ."<rect x='".(400 - 34)."' y='".($y - 34)."' width='68' height='22' rx='11' fill='#FBF8F1'/>"
-            ."<text x='400' y='".($y - 18)."' text-anchor='middle' font-family='Inter, Arial, sans-serif' font-size='14' font-weight='600' fill='".self::NAVY."'>{$w} ft</text>"
-            ."<line x1='".($x + $pw + 22)."' y1='{$y}' x2='".($x + $pw + 22)."' y2='".($y + $ph)."' stroke='".self::NAVY."' stroke-width='1.5'/>"
-            ."<text x='".($x + $pw + 32)."' y='".($y + $ph / 2 + 5)."' font-family='Inter, Arial, sans-serif' font-size='14' font-weight='600' fill='".self::NAVY."'>{$h} ft</text>"
+            .($measurements
+                ? "<line x1='{$x}' y1='".($y - 22)."' x2='".($x + $pw)."' y2='".($y - 22)."' stroke='".self::NAVY."' stroke-width='1.5'/>"
+                    ."<line x1='{$x}' y1='".($y - 30)."' x2='{$x}' y2='".($y - 14)."' stroke='".self::NAVY."' stroke-width='1.5'/>"
+                    ."<line x1='".($x + $pw)."' y1='".($y - 30)."' x2='".($x + $pw)."' y2='".($y - 14)."' stroke='".self::NAVY."' stroke-width='1.5'/>"
+                    ."<rect x='".(400 - 34)."' y='".($y - 34)."' width='68' height='22' rx='11' fill='#FBF8F1'/>"
+                    ."<text x='400' y='".($y - 18)."' text-anchor='middle' font-family='Inter, Arial, sans-serif' font-size='14' font-weight='600' fill='".self::NAVY."'>{$w} ft</text>"
+                    ."<line x1='".($x + $pw + 22)."' y1='{$y}' x2='".($x + $pw + 22)."' y2='".($y + $ph)."' stroke='".self::NAVY."' stroke-width='1.5'/>"
+                    ."<text x='".($x + $pw + 32)."' y='".($y + $ph / 2 + 5)."' font-family='Inter, Arial, sans-serif' font-size='14' font-weight='600' fill='".self::NAVY."'>{$h} ft</text>"
+                : '')
             ."<text x='400' y='".($hy + $houseH / 2 - 4)."' text-anchor='middle' font-family='Georgia, serif' font-size='40' font-weight='700' fill='".self::NAVY."'>".e(strtoupper($label)).'</text>'
             ."<text x='400' y='".($hy + $houseH / 2 + 24)."' text-anchor='middle' font-family='Inter, Arial, sans-serif' font-size='15' fill='".self::NAVY."' fill-opacity='0.7'>".e($area).'</text>'
             .'</svg>';

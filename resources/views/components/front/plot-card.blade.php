@@ -4,10 +4,11 @@
     $plan = $plot->activePlans->first();
     $rows = array_filter([
         ['Booking', $plot->booking_amount, null],
+        ['Confirmation', $plot->down_payment, null],
         ['Installment', $plot->installment_amount, $plot->frequencySuffix()],
         ['After 6 Months', $plot->after_6_months_payment, null],
         ['After 12 Months', $plot->after_12_months_payment, null],
-        ['End Payment', $plot->end_payment, null],
+        ['Possession', $plot->end_payment, null],
     ], fn ($row) => $row[1] !== null);
     $whatsapp = setting_enabled('whatsapp_on_plot_cards', true)
         ? whatsapp_url(str_replace('{plot}', $plot->size_label, (string) setting('whatsapp_plot_message')))

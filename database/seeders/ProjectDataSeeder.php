@@ -77,7 +77,7 @@ class ProjectDataSeeder extends Seeder
             'site_name' => 'Model Town Khurrianwala',
             'site_tagline' => 'Gated Community on Jhumra Road, Khurrianwala — Ideal for Living & Investment',
             'logo_subtitle' => 'Khurrianwala · Faisalabad',
-            'demo_notice_text' => 'Plot prices, installment plans, testimonials and photos shown are sample content. Call 0300-8653838 for current rates.',
+            'demo_notice_text' => 'Testimonials and photos shown are sample content. Call 0300-8653838 for more information.',
         ]);
 
         $settings->update('contact', [

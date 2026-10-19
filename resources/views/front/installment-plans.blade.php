@@ -41,7 +41,7 @@
                         </div>
 
                         @foreach ($plot->activePlans as $i => $plan)
-                            @php($summary = $plan->summary())
+                            @php $summary = $plan->summary(); @endphp
                             <div x-show="plan === {{ $i }}" @if ($i) x-cloak @endif class="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
                                 <x-front.payment-timeline :plan="$plan" />
                                 <aside class="space-y-4 lg:sticky lg:top-24 lg:self-start">
@@ -93,24 +93,35 @@
                                 <th class="px-5 py-4 font-semibold">Plan</th>
                                 <th class="px-5 py-4 font-semibold">Total</th>
                                 <th class="px-5 py-4 font-semibold">Booking</th>
-                                <th class="px-5 py-4 font-semibold">Advance</th>
+                                <th class="px-5 py-4 font-semibold">Confirmation</th>
                                 <th class="px-5 py-4 font-semibold">Installment</th>
                                 <th class="px-5 py-4 font-semibold">Milestones</th>
-                                <th class="px-5 py-4 font-semibold">End</th>
+                                <th class="px-5 py-4 font-semibold">Possession</th>
                                 <th class="px-5 py-4 font-semibold">Duration</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-primary/6">
                             @foreach ($plots as $plot)
                                 @foreach ($plot->activePlans as $plan)
-                                    @php($s = $plan->summary())
+                                    @php
+                                        $s = $plan->summary();
+                                        // Equal milestone payments read as "PKR 135,000 × 4" rather than one sum.
+                                        $milestones = collect($s->stages)->filter(fn ($stage) => in_array($stage['item']->type?->value, ['after_6_months', 'after_12_months', 'after_18_months', 'after_24_months', 'custom'], true));
+                                        $equal = $milestones->count() > 1 && $milestones->pluck('line_total')->unique()->count() === 1;
+                                    @endphp
                                     <tr class="hover:bg-surface">
                                         <td class="px-5 py-4"><span class="block font-semibold text-primary">{{ $plot->size_label }}</span><span class="text-xs text-ink/70">{{ $plan->name }}</span></td>
                                         <td class="px-5 py-4 font-semibold text-primary">{{ money($s->totalPrice) }}</td>
                                         <td class="px-5 py-4">{{ money($s->amountFor('booking')) }}</td>
                                         <td class="px-5 py-4">{{ money($s->amountFor('advance', 'full_payment')) }}</td>
                                         <td class="px-5 py-4">{{ money($s->installmentAmount) }} <span class="text-xs text-ink/70">× {{ $s->installmentCount }}</span></td>
-                                        <td class="px-5 py-4">{{ money($s->amountFor('after_6_months', 'after_12_months', 'after_18_months', 'after_24_months', 'custom')) }}</td>
+                                        <td class="px-5 py-4">
+                                            @if ($equal)
+                                                {{ money($milestones->first()['line_total']) }} <span class="text-xs text-ink/70">× {{ $milestones->count() }}</span>
+                                            @else
+                                                {{ money($s->amountFor('after_6_months', 'after_12_months', 'after_18_months', 'after_24_months', 'custom')) }}
+                                            @endif
+                                        </td>
                                         <td class="px-5 py-4">{{ money($s->amountFor('end_payment')) }}</td>
                                         <td class="px-5 py-4">{{ $s->durationMonths }} mo</td>
                                     </tr>

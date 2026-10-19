@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             PlotSeeder::class,
             ProjectContentSeeder::class,
             ProjectDataSeeder::class,
+            PaymentPlanSeeder::class,
         ]);
 
         if (! app()->isProduction()) {

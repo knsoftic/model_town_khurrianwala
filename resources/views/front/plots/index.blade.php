@@ -44,11 +44,12 @@
                         <thead class="bg-primary text-white">
                             <tr>
                                 <th class="px-5 py-4 font-semibold">Plot Size</th>
-                                <th class="px-5 py-4 font-semibold">Starting From</th>
+                                <th class="px-5 py-4 font-semibold">Total Price</th>
                                 <th class="px-5 py-4 font-semibold">Booking</th>
+                                <th class="px-5 py-4 font-semibold">Confirmation</th>
+                                <th class="px-5 py-4 font-semibold">After 6 Months</th>
                                 <th class="px-5 py-4 font-semibold">Installment</th>
-                                <th class="px-5 py-4 font-semibold">After 6 / 12 Months</th>
-                                <th class="px-5 py-4 font-semibold">End Payment</th>
+                                <th class="px-5 py-4 font-semibold">Possession</th>
                                 <th class="px-5 py-4 font-semibold">Status</th>
                             </tr>
                         </thead>
@@ -56,10 +57,11 @@
                             @foreach ($plots as $plot)
                                 <tr class="transition hover:bg-surface">
                                     <td class="px-5 py-4"><a href="{{ route('plots.show', $plot) }}" class="font-semibold text-primary hover:text-accent">{{ $plot->size_label }}</a></td>
-                                    <td class="px-5 py-4 font-semibold text-primary">{{ money($plot->displayPrice()) }}</td>
+                                    <td class="px-5 py-4 font-semibold text-primary">{{ money($plot->total_price ?? $plot->displayPrice()) }}</td>
                                     <td class="px-5 py-4">{{ money($plot->booking_amount) }}</td>
+                                    <td class="px-5 py-4">{{ money($plot->down_payment) }}</td>
+                                    <td class="px-5 py-4">{{ money($plot->after_6_months_payment) }}@if ($plot->after_12_months_payment) / {{ money($plot->after_12_months_payment) }}@endif</td>
                                     <td class="px-5 py-4">{{ money($plot->installment_amount) }} <span class="text-xs text-ink/70">{{ $plot->frequencySuffix() }}</span></td>
-                                    <td class="px-5 py-4">{{ money($plot->after_6_months_payment) }} / {{ money($plot->after_12_months_payment) }}</td>
                                     <td class="px-5 py-4">{{ money($plot->end_payment) }}</td>
                                     <td class="px-5 py-4"><x-front.status-badge :status="$plot->status" /></td>
                                 </tr>
