@@ -40,11 +40,15 @@ class InstallmentCalculator
             $scheduled += $lineTotal;
             $totalsByType[$type->value] = ($totalsByType[$type->value] ?? 0) + $lineTotal;
 
+            // The first repeating series (usually the monthly one) is "the installment";
+            // a second series such as 6-month installments is shown as its own stage.
             if ($type->isRecurring()) {
-                $installmentCount += $occurrences;
-                if ($installmentAmount === 0.0) {
+                if ($installmentType === null) {
                     $installmentAmount = (float) $item->amount;
                     $installmentType = $type->value;
+                }
+                if ($type->value === $installmentType) {
+                    $installmentCount += $occurrences;
                 }
             }
 

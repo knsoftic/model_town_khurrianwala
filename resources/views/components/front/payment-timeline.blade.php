@@ -2,7 +2,6 @@
 
 @php
     $summary = $plan->summary();
-    $unit = fn ($type) => $type?->value === 'quarterly' ? 'quarter' : 'month';
 @endphp
 
 <div {{ $attributes->class(['relative']) }}>
@@ -42,7 +41,7 @@
                         <div class="shrink-0 sm:text-right">
                             <p class="font-heading text-xl font-semibold text-primary sm:text-2xl">{{ money($item->amount) }}</p>
                             @if ($item->occurrences > 1)
-                                <p class="text-xs font-medium text-ink/70">× {{ $item->occurrences }} {{ str($unit($item->type))->plural($item->occurrences) }} = <span class="text-primary">{{ money($stage['line_total']) }}</span></p>
+                                <p class="text-xs font-medium text-ink/70">{{ $item->type->repeatText($item->occurrences) }} = <span class="text-primary">{{ money($stage['line_total']) }}</span></p>
                             @endif
                         </div>
                     </div>

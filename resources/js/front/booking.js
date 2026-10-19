@@ -29,7 +29,7 @@ export default (plots, initialPlot = null, initialPlan = null) => ({
 
     occurrenceLabel(item) {
         if (item.occurrences <= 1) return '';
-        return `× ${plural(item.occurrences, item.type === 'quarterly' ? 'quarter' : 'month')}`;
+        return item.repeat_text ?? `× ${plural(item.occurrences, 'month')}`;
     },
 
     money,

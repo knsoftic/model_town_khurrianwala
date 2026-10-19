@@ -99,7 +99,7 @@
                                             <span class="font-semibold">{{ $plot->size_label }}</span>
                                             <x-front.status-badge :status="$plot->status" class="!px-2 !py-0.5 !text-[9px] bg-white!" />
                                         </span>
-                                        <span class="mt-0.5 block text-xs text-white/60">Booking {{ money($plot->booking_amount) }}</span>
+                                        <span class="mt-0.5 block text-xs text-white/60">@if ($plot->booking_amount)Booking {{ money($plot->booking_amount) }}@else{{ $plot->stageTitle(['advance', 'full_payment'], 'Down Payment') }} {{ money($plot->down_payment) }}@endif</span>
                                     </span>
                                     <span class="text-right">
                                         <span class="block text-sm font-semibold text-accent">{{ money($plot->installment_amount) }}</span>

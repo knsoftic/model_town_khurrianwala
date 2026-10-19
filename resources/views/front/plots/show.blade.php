@@ -4,23 +4,20 @@
     $plans = $plot->activePlans;
     $gallery = collect([$plot->image])->filter()->merge($plot->images->pluck('path'))->values();
     $whatsapp = whatsapp_url(str_replace('{plot}', $plot->size_label, (string) setting('whatsapp_plot_message')));
-    // Labels follow the default plan's own stage names (e.g. "Confirmation", "Possession").
-    $stages = $plans->first()?->items ?? collect();
-    $stage = fn (string $type, string $fallback) => $stages->first(fn ($item) => $item->type?->value === $type)?->title ?: $fallback;
-    $sixMonthly = $plot->after_6_months_payment ? $stages->filter(fn ($item) => in_array($item->type?->value, ['after_6_months', 'after_12_months', 'after_18_months', 'after_24_months'], true)
-        && (float) $item->amount === (float) $plot->after_6_months_payment)->count() : 0;
+    // Labels follow the default plan's own stage names ("Down Payment", "On Registry").
+    $sixMonthly = $plot->stage('half_yearly');
     $facts = array_filter([
         ['Total Price', money($plot->total_price), 'banknote'],
         ['Lump-sum / Starting From', money($plot->starting_price), 'badge-percent'],
-        [$stage('booking', 'Booking Amount'), money($plot->booking_amount), 'bookmark-check'],
-        [$stage('advance', 'Down / Advance Payment'), money($plot->down_payment), 'wallet'],
-        ['Installment', $plot->installment_amount ? money($plot->installment_amount).' '.$plot->frequencySuffix() : null, 'calendar-days'],
+        [$plot->stageTitle('booking', 'Booking Amount'), money($plot->booking_amount), 'bookmark-check'],
+        [$plot->stageTitle(['advance', 'full_payment'], 'Down Payment'), money($plot->down_payment), 'wallet'],
+        [$plot->stageTitle(['monthly', 'quarterly'], 'Installment'), $plot->installment_amount ? money($plot->installment_amount).' '.$plot->frequencySuffix() : null, 'calendar-days'],
         ['No. of Installments', $plot->installment_count ? $plot->installment_count.' ('.$plot->frequencyLabel().')' : null, 'list-ordered'],
-        $sixMonthly > 1
-            ? ['Every 6 Months', money($plot->after_6_months_payment).' × '.$sixMonthly, 'calendar-clock']
+        $sixMonthly
+            ? [$sixMonthly->title, money($sixMonthly->amount).' × '.$sixMonthly->occurrences, 'calendar-sync']
             : ['After 6 Months', money($plot->after_6_months_payment), 'calendar-clock'],
         ['After 12 Months', money($plot->after_12_months_payment), 'calendar-clock'],
-        [$stage('end_payment', 'End Payment'), money($plot->end_payment), 'key-round'],
+        [$plot->stageTitle(['registry', 'end_payment'], 'End Payment'), money($plot->end_payment), 'stamp'],
         ['Development Charges', money($plot->development_charges), 'hard-hat'],
         ['Possession Charges', money($plot->possession_charges), 'house'],
         ['Dimensions', $plot->dimensions ? $plot->dimensions.' ft' : null, 'ruler'],
@@ -206,7 +203,7 @@
                 <div class="bg-primary p-6 text-white">
                     <p class="text-xs font-semibold tracking-wider text-accent uppercase">{{ $plot->size_label }}</p>
                     <p class="mt-1 font-heading text-3xl font-semibold">{{ money($plot->displayPrice()) }}</p>
-                    <p class="mt-1 text-sm text-white/65">Booking {{ money($plot->booking_amount) }} · {{ money($plot->installment_amount) }} {{ $plot->frequencySuffix() }}</p>
+                    <p class="mt-1 text-sm text-white/65">@if ($plot->booking_amount)Booking {{ money($plot->booking_amount) }}@else{{ $plot->stageTitle(['advance', 'full_payment'], 'Down Payment') }} {{ money($plot->down_payment) }}@endif · {{ money($plot->installment_amount) }} {{ $plot->frequencySuffix() }}</p>
                 </div>
                 <div class="p-6">
                     <x-front.lead-form :plots="collect([$plot])" :selected="$plot->id" source="plot_page" :compact="true"

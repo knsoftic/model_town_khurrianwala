@@ -39,17 +39,23 @@
         <section data-defer class="bg-white py-16 sm:py-24">
             <div class="container-x">
                 <x-front.section-heading eyebrow="Compare" heading="Compare Plot Sizes at a Glance" subheading="Prices and payment milestones for every plot size, side by side." />
+                @php
+                    $head = $plots->first();
+                    $showBooking = $plots->contains(fn ($plot) => (float) $plot->booking_amount > 0);
+                @endphp
                 <div class="mt-12 overflow-x-auto rounded-brand-lg border border-primary/8 shadow-soft">
                     <table class="w-full min-w-[720px] text-left text-sm">
                         <thead class="bg-primary text-white">
                             <tr>
                                 <th class="px-5 py-4 font-semibold">Plot Size</th>
                                 <th class="px-5 py-4 font-semibold">Total Price</th>
-                                <th class="px-5 py-4 font-semibold">Booking</th>
-                                <th class="px-5 py-4 font-semibold">Confirmation</th>
-                                <th class="px-5 py-4 font-semibold">After 6 Months</th>
+                                @if ($showBooking)
+                                    <th class="px-5 py-4 font-semibold">Booking</th>
+                                @endif
+                                <th class="px-5 py-4 font-semibold">{{ $head?->stageTitle(['advance', 'full_payment'], 'Down Payment') ?? 'Down Payment' }}</th>
                                 <th class="px-5 py-4 font-semibold">Installment</th>
-                                <th class="px-5 py-4 font-semibold">Possession</th>
+                                <th class="px-5 py-4 font-semibold">{{ $head?->stageTitle(['half_yearly', 'after_6_months'], 'After 6 Months') ?? 'After 6 Months' }}</th>
+                                <th class="px-5 py-4 font-semibold">{{ $head?->stageTitle(['registry', 'end_payment'], 'End Payment') ?? 'End Payment' }}</th>
                                 <th class="px-5 py-4 font-semibold">Status</th>
                             </tr>
                         </thead>
@@ -58,10 +64,12 @@
                                 <tr class="transition hover:bg-surface">
                                     <td class="px-5 py-4"><a href="{{ route('plots.show', $plot) }}" class="font-semibold text-primary hover:text-accent">{{ $plot->size_label }}</a></td>
                                     <td class="px-5 py-4 font-semibold text-primary">{{ money($plot->total_price ?? $plot->displayPrice()) }}</td>
-                                    <td class="px-5 py-4">{{ money($plot->booking_amount) }}</td>
+                                    @if ($showBooking)
+                                        <td class="px-5 py-4">{{ money($plot->booking_amount) }}</td>
+                                    @endif
                                     <td class="px-5 py-4">{{ money($plot->down_payment) }}</td>
-                                    <td class="px-5 py-4">{{ money($plot->after_6_months_payment) }}@if ($plot->after_12_months_payment) / {{ money($plot->after_12_months_payment) }}@endif</td>
                                     <td class="px-5 py-4">{{ money($plot->installment_amount) }} <span class="text-xs text-ink/70">{{ $plot->frequencySuffix() }}</span></td>
+                                    <td class="px-5 py-4">{{ money($plot->after_6_months_payment) }}@if ($six = $plot->stage('half_yearly')) <span class="text-xs text-ink/70">× {{ $six->occurrences }}</span>@elseif ($plot->after_12_months_payment) / {{ money($plot->after_12_months_payment) }}@endif</td>
                                     <td class="px-5 py-4">{{ money($plot->end_payment) }}</td>
                                     <td class="px-5 py-4"><x-front.status-badge :status="$plot->status" /></td>
                                 </tr>

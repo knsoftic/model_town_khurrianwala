@@ -53,28 +53,20 @@ export default (apiUrl, initialPlot = null) => ({
         return (this.plan?.items ?? []).find((item) => item.is_recurring) ?? null;
     },
 
+    /**
+     * One row per stage of the selected plan, in the plan's own order and wording
+     * (e.g. Down Payment, Monthly Installments, 6-Month Installments, On Registry).
+     */
     get rows() {
         if (!this.plan) return [];
-        const recurring = this.recurring;
-        const rows = [
-            { label: 'Booking Amount', icon: 'booking', value: this.sumOf('booking') },
-            { label: 'Advance / Down Payment', icon: 'advance', value: this.sumOf('advance', 'full_payment') },
-            recurring
-                ? {
-                      label: recurring.type === 'quarterly' ? 'Quarterly Installment' : 'Monthly Installment',
-                      icon: 'monthly',
-                      value: recurring.amount,
-                      note: `× ${plural(recurring.occurrences, recurring.type === 'quarterly' ? 'quarter' : 'month')} = ${money(this.sumOf('monthly', 'quarterly'))}`,
-                  }
-                : null,
-            { label: 'After 6 Months', icon: 'milestone', value: this.sumOf('after_6_months') },
-            { label: 'After 12 Months', icon: 'milestone', value: this.sumOf('after_12_months') },
-            { label: 'After 18 Months', icon: 'milestone', value: this.sumOf('after_18_months') },
-            { label: 'After 24 Months', icon: 'milestone', value: this.sumOf('after_24_months') },
-            { label: 'Other Payments', icon: 'milestone', value: this.sumOf('custom') },
-            { label: 'End / Possession Payment', icon: 'end', value: this.sumOf('end_payment') },
-        ];
-        return rows.filter((row) => row && row.value > 0);
+        return this.plan.items
+            .filter((item) => item.line_total > 0)
+            .map((item, index) => ({
+                key: `${index}-${item.type}`,
+                label: item.title,
+                value: item.is_recurring ? item.amount : item.line_total,
+                note: item.repeat_text ? `${item.repeat_text} = ${money(item.line_total)}` : (item.due_label ?? null),
+            }));
     },
 
     get duration() {

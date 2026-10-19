@@ -26,6 +26,7 @@ class PaymentScheduleItemResource extends JsonResource
             'amount' => (float) $this->amount,
             'occurrences' => (int) $this->occurrences,
             'line_total' => $this->lineTotal(),
+            'repeat_text' => $this->type->isRecurring() && $this->occurrences > 1 ? $this->type->repeatText((int) $this->occurrences) : null,
             'due_after_months' => $this->due_after_months,
             'due_label' => $this->due_label,
             'description' => $this->description,

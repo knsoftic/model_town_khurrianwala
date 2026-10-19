@@ -49,7 +49,7 @@
 
             <div class="mt-8 flex items-start gap-3 rounded-brand bg-white p-4 text-xs text-ink/70 ring-1 ring-primary/8">
                 <x-icon name="info" class="mt-0.5 size-4 text-accent" />
-                <p>Amounts come directly from the installment plans managed by our sales office. Development and possession charges, where applicable, are shown separately on each plot page.</p>
+                <p>Amounts come directly from the installment plans managed by our sales office. Call us to confirm availability before you pay.</p>
             </div>
         </div>
 
@@ -67,7 +67,7 @@
                     </div>
 
                     <dl class="mt-6 divide-y divide-primary/6 rounded-brand border border-primary/8">
-                        <template x-for="row in rows" :key="row.label">
+                        <template x-for="row in rows" :key="row.key">
                             <div class="flex items-center justify-between gap-4 px-4 py-3.5">
                                 <dt class="text-sm text-ink/70" x-text="row.label"></dt>
                                 <dd class="text-right">

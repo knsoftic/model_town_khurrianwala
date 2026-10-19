@@ -86,17 +86,23 @@
         <section data-defer class="bg-white py-16 sm:py-24">
             <div class="container-x">
                 <x-front.section-heading eyebrow="Compare" heading="All Plans Side by Side" />
+                @php
+                    $head = $plots->first();
+                    $showBooking = $plots->contains(fn ($plot) => $plot->activePlans->contains(fn ($plan) => $plan->summary()->amountFor('booking') > 0));
+                @endphp
                 <div class="mt-10 overflow-x-auto rounded-brand-lg border border-primary/8 shadow-soft">
                     <table class="w-full min-w-[820px] text-left text-sm">
                         <thead class="bg-primary text-white">
                             <tr>
                                 <th class="px-5 py-4 font-semibold">Plan</th>
                                 <th class="px-5 py-4 font-semibold">Total</th>
-                                <th class="px-5 py-4 font-semibold">Booking</th>
-                                <th class="px-5 py-4 font-semibold">Confirmation</th>
+                                @if ($showBooking)
+                                    <th class="px-5 py-4 font-semibold">Booking</th>
+                                @endif
+                                <th class="px-5 py-4 font-semibold">{{ $head?->stageTitle(['advance', 'full_payment'], 'Down Payment') ?? 'Down Payment' }}</th>
                                 <th class="px-5 py-4 font-semibold">Installment</th>
-                                <th class="px-5 py-4 font-semibold">Milestones</th>
-                                <th class="px-5 py-4 font-semibold">Possession</th>
+                                <th class="px-5 py-4 font-semibold">{{ $head?->stage('half_yearly')?->title ?? 'Milestones' }}</th>
+                                <th class="px-5 py-4 font-semibold">{{ $head?->stageTitle(['registry', 'end_payment'], 'End Payment') ?? 'End Payment' }}</th>
                                 <th class="px-5 py-4 font-semibold">Duration</th>
                             </tr>
                         </thead>
@@ -105,24 +111,29 @@
                                 @foreach ($plot->activePlans as $plan)
                                     @php
                                         $s = $plan->summary();
-                                        // Equal milestone payments read as "PKR 135,000 × 4" rather than one sum.
+                                        // A 6-month series (or equal milestones) reads as "PKR 135,000 × 4" rather than one sum.
+                                        $sixMonthly = $plan->items->first(fn ($item) => $item->type?->value === 'half_yearly');
                                         $milestones = collect($s->stages)->filter(fn ($stage) => in_array($stage['item']->type?->value, ['after_6_months', 'after_12_months', 'after_18_months', 'after_24_months', 'custom'], true));
                                         $equal = $milestones->count() > 1 && $milestones->pluck('line_total')->unique()->count() === 1;
                                     @endphp
                                     <tr class="hover:bg-surface">
                                         <td class="px-5 py-4"><span class="block font-semibold text-primary">{{ $plot->size_label }}</span><span class="text-xs text-ink/70">{{ $plan->name }}</span></td>
                                         <td class="px-5 py-4 font-semibold text-primary">{{ money($s->totalPrice) }}</td>
-                                        <td class="px-5 py-4">{{ money($s->amountFor('booking')) }}</td>
+                                        @if ($showBooking)
+                                            <td class="px-5 py-4">{{ money($s->amountFor('booking')) }}</td>
+                                        @endif
                                         <td class="px-5 py-4">{{ money($s->amountFor('advance', 'full_payment')) }}</td>
                                         <td class="px-5 py-4">{{ money($s->installmentAmount) }} <span class="text-xs text-ink/70">× {{ $s->installmentCount }}</span></td>
                                         <td class="px-5 py-4">
-                                            @if ($equal)
+                                            @if ($sixMonthly)
+                                                {{ money($sixMonthly->amount) }} <span class="text-xs text-ink/70">× {{ $sixMonthly->occurrences }}</span>
+                                            @elseif ($equal)
                                                 {{ money($milestones->first()['line_total']) }} <span class="text-xs text-ink/70">× {{ $milestones->count() }}</span>
                                             @else
                                                 {{ money($s->amountFor('after_6_months', 'after_12_months', 'after_18_months', 'after_24_months', 'custom')) }}
                                             @endif
                                         </td>
-                                        <td class="px-5 py-4">{{ money($s->amountFor('end_payment')) }}</td>
+                                        <td class="px-5 py-4">{{ money($s->amountFor('end_payment', 'registry')) }}</td>
                                         <td class="px-5 py-4">{{ $s->durationMonths }} mo</td>
                                     </tr>
                                 @endforeach

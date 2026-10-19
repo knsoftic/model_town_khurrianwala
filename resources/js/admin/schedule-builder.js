@@ -1,7 +1,7 @@
 import Sortable from 'sortablejs';
 
-const recurring = ['monthly', 'quarterly'];
-const intervals = { quarterly: 3 };
+const recurring = ['monthly', 'quarterly', 'half_yearly'];
+const intervals = { quarterly: 3, half_yearly: 6 };
 
 let uid = 0;
 const nextKey = () => `stage-${Date.now()}-${uid++}`;
@@ -42,7 +42,7 @@ export default ({ items = [], total = 0, types = {}, defaults = {} }) => ({
             type,
             title: label,
             amount: 0,
-            occurrences: recurring.includes(type) ? 12 : 1,
+            occurrences: type === 'half_yearly' ? 4 : recurring.includes(type) ? 24 : 1,
             percentage: 0,
             due_after_months: this.defaults[type] ?? '',
             due_label: '',
@@ -97,19 +97,18 @@ export default ({ items = [], total = 0, types = {}, defaults = {} }) => ({
     },
 
     loadTemplate() {
-        if (this.items.length && !confirm('Replace the current stages with the standard 36-month template?')) return;
+        if (this.items.length && !confirm('Replace the current stages with the standard template (down payment, 24 monthly installments, 6-month installments, on registry)?')) return;
         if (!this.total) {
             alert('Enter the total price first.');
             return;
         }
         const pct = (p, occurrences = 1) => round2((this.total * p) / 100 / occurrences);
+        // Down payment → monthly installments → 6-month installments → final payment on registry.
         const template = [
-            ['booking', 'Booking', pct(5), 1, 0, 'At the time of booking'],
-            ['advance', 'Advance Payment', pct(15), 1, 1, 'Within 30 days of booking'],
-            ['monthly', 'Monthly Installments', pct(50, 36), 36, 1, '36 monthly installments'],
-            ['after_6_months', 'After 6 Months', pct(7), 1, 6, 'Due in month 6'],
-            ['after_12_months', 'After 12 Months', pct(7), 1, 12, 'Due in month 12'],
-            ['end_payment', 'End / Possession Payment', 0, 1, 36, 'At possession'],
+            ['advance', 'Down Payment', pct(30), 1, 0, 'Paid upfront'],
+            ['monthly', 'Monthly Installments', pct(25, 24), 24, 1, '24 monthly installments'],
+            ['half_yearly', '6-Month Installments', pct(20, 4), 4, 6, 'Every 6 months'],
+            ['registry', 'On Registry', 0, 1, null, 'Final payment on registry'],
         ];
         this.items = template.map(([type, title, amount, occurrences, due, label]) => ({
             key: nextKey(),
@@ -143,8 +142,11 @@ export default ({ items = [], total = 0, types = {}, defaults = {} }) => ({
         return round2(100 - this.allocatedPercent);
     },
 
+    // The first repeating series (usually monthly) is "the installment"; a second series
+    // such as 6-month installments is its own stage — same rule as InstallmentCalculator.
     get installmentItems() {
-        return this.items.filter((item) => recurring.includes(item.type));
+        const first = this.items.find((item) => recurring.includes(item.type));
+        return first ? this.items.filter((item) => item.type === first.type) : [];
     },
 
     get installmentCount() {

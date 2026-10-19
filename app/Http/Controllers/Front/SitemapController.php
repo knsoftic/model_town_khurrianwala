@@ -67,7 +67,7 @@ class SitemapController extends Controller
             foreach ($plots as $plot) {
                 $facts = array_filter([
                     $plot->displayPrice() ? 'from '.money($plot->displayPrice()) : null,
-                    $plot->booking_amount ? 'booking '.money($plot->booking_amount) : null,
+                    $plot->booking_amount ? 'booking '.money($plot->booking_amount) : ($plot->down_payment ? 'down payment '.money($plot->down_payment) : null),
                     $plot->installment_amount ? 'installment '.money($plot->installment_amount).' '.$plot->frequencySuffix() : null,
                     $plot->status->label(),
                     $plot->is_demo_price ? 'demo price, confirm with the sales office' : null,

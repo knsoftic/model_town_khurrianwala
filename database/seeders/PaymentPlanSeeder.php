@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\PaymentStageType;
 use App\Enums\PlotStatus;
 use App\Models\Faq;
+use App\Models\HomepageSection;
 use App\Models\InstallmentPlan;
 use App\Models\Location;
 use App\Models\NavigationItem;
@@ -16,36 +17,42 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Plots and installment plans from the official "Residential Payment Plan" flyer:
- * 3, 5 and 10 Marla residential. Every other plot size and plan is moved to the
- * trash (leads and bookings that mention them are kept), so the website shows only
- * these. New sizes and plans can still be added from the admin panel afterwards.
+ * Residential payment plans for 3, 5 and 10 Marla, in four steps and with no
+ * booking fee:
+ *
+ *   1. Down payment (30%)
+ *   2. Monthly installments (24)
+ *   3. 6-month installments (4 — months 6, 12, 18 and 24)
+ *   4. Final payment on registry (25%) — the payment is then complete
+ *
+ * The amounts are the official flyer's, with its booking and confirmation merged into
+ * the down payment and its possession payment taken on registry. Every other plot
+ * size and plan is moved to the trash (leads and bookings that mention them are
+ * kept), so the website shows only these; more can still be added in the admin.
  *
  *   php artisan db:seed --class=PaymentPlanSeeder --force
- *
- * The flyer lists one "After 6 Month" amount and a monthly amount. The totals only
- * balance with 24 monthly installments plus that amount every 6 months (months 6,
- * 12, 18 and 24), so each plan is 15% booking + 15% confirmation + 24 × monthly +
- * 4 × six-monthly + 25% on possession = 100%.
  */
 class PaymentPlanSeeder extends Seeder
 {
     public const MONTHS = 24;
 
+    public const SIX_MONTHLY = 4;
+
     /**
-     * size => [total, booking, confirmation, every 6 months, monthly, possession]
+     * size => [total, down payment, monthly, every 6 months, on registry]
      *
-     * @var array<string, array{0: int, 1: int, 2: int, 3: int, 4: int, 5: int}>
+     * @var array<string, array{0: int, 1: int, 2: int, 3: int, 4: int}>
      */
     public const PLANS = [
-        '3 Marla' => [2700000, 405000, 405000, 135000, 28125, 675000],
-        '5 Marla' => [4500000, 675000, 675000, 225000, 46875, 1125000],
-        '10 Marla' => [9000000, 1350000, 1350000, 450000, 93750, 2250000],
+        '3 Marla' => [2700000, 810000, 28125, 135000, 675000],
+        '5 Marla' => [4500000, 1350000, 46875, 225000, 1125000],
+        '10 Marla' => [9000000, 2700000, 93750, 450000, 2250000],
     ];
 
     public const CASH_DISCOUNT = 0.10;
 
     public const TERMS = [
+        'No booking fee.',
         '10% discount on cash payment.',
         'Possession for construction on payment of 30%.',
         '10% extra will be charged on category plots.',
@@ -63,7 +70,7 @@ class PaymentPlanSeeder extends Seeder
                 $plans[] = $plan->id;
             }
 
-            // Only the flyer's sizes and plans remain on the website.
+            // Only these sizes and plans remain on the website.
             Plot::query()->whereNotIn('id', $keep)->get()->each->delete();
             InstallmentPlan::query()->whereNotIn('id', $plans)->get()->each->delete();
 
@@ -85,7 +92,7 @@ class PaymentPlanSeeder extends Seeder
      */
     protected function plot(string $size, int $order): array
     {
-        [$total, $booking, $confirmation, $sixMonthly, $monthly, $possession] = self::PLANS[$size];
+        [$total, $down, $monthly, $sixMonthly, $registry] = self::PLANS[$size];
         $slug = str($size)->slug()->toString();
         $cash = (int) round($total * (1 - self::CASH_DISCOUNT));
         $money = fn (int $amount) => 'PKR '.number_format($amount);
@@ -99,28 +106,27 @@ class PaymentPlanSeeder extends Seeder
             'size_label' => $size,
             'title' => "{$size} Residential Plot",
             'category' => 'residential',
-            'short_description' => "Total price {$money($total)} — booking {$money($booking)} and {$money($monthly)} a month for ".self::MONTHS.' months.',
-            'full_description' => "<p>{$size} residential plot in Model Town Khurrianwala, Faisalabad, on an easy installment plan. Total price {$money($total)}.</p>"
-                .'<ul>'
-                ."<li>Booking: {$money($booking)}</li>"
-                ."<li>Confirmation: {$money($confirmation)}</li>"
-                ."<li>Monthly installment: {$money($monthly)} × ".self::MONTHS.'</li>'
-                ."<li>After every 6 months: {$money($sixMonthly)} × 4</li>"
-                ."<li>Possession: {$money($possession)}</li>"
-                .'</ul>'
+            'short_description' => "Total price {$money($total)} — down payment {$money($down)}, then {$money($monthly)} a month. No booking fee.",
+            'full_description' => "<p>{$size} residential plot in Model Town Khurrianwala, Faisalabad, on an easy installment plan with no booking fee. Total price {$money($total)}.</p>"
+                .'<ol>'
+                ."<li>Down payment: {$money($down)}</li>"
+                ."<li>Monthly installments: {$money($monthly)} × ".self::MONTHS.'</li>'
+                ."<li>6-month installments: {$money($sixMonthly)} × ".self::SIX_MONTHLY.' (every 6 months)</li>'
+                ."<li>On registry: {$money($registry)} — your payment is then complete</li>"
+                .'</ol>'
                 .'<h3>Terms and conditions</h3><ul>'.collect(self::TERMS)->map(fn (string $term) => '<li>'.rtrim($term, '.').'</li>')->implode('').'</ul>',
             'dimensions' => null,
             'area_sqft' => null,
             'starting_price' => null,
             'total_price' => $total,
-            'booking_amount' => $booking,
-            'down_payment' => $confirmation,
+            'booking_amount' => null,
+            'down_payment' => $down,
             'installment_count' => self::MONTHS,
             'installment_amount' => $monthly,
             'payment_frequency' => 'monthly',
             'after_6_months_payment' => $sixMonthly,
             'after_12_months_payment' => null,
-            'end_payment' => $possession,
+            'end_payment' => $registry,
             'development_charges' => null,
             'possession_charges' => null,
             'total_units' => 0,
@@ -129,7 +135,7 @@ class PaymentPlanSeeder extends Seeder
             'is_featured' => true,
             'is_active' => true,
             'is_demo_price' => false,
-            'price_note' => '10% discount on cash payment · 10% extra on category plots',
+            'price_note' => 'No booking fee · 10% discount on cash payment · 10% extra on category plots',
             'sort_order' => $order,
         ]);
         $plot->location_id ??= Location::query()->where('slug', 'khurrianwala-main-site')->value('id');
@@ -144,7 +150,7 @@ class PaymentPlanSeeder extends Seeder
 
         $plot->seo()->updateOrCreate([], [
             'title' => "{$size} Plot in Model Town Khurrianwala — {$money($total)} on Installments",
-            'description' => "{$size} residential plot: total {$money($total)}, booking {$money($booking)}, {$money($monthly)} monthly. 10% discount on cash payment.",
+            'description' => "{$size} residential plot: total {$money($total)}, down payment {$money($down)}, {$money($monthly)} monthly. No booking fee, 10% off on cash payment.",
         ]);
 
         $plan = InstallmentPlan::withTrashed()->firstOrNew(['slug' => "{$slug}-residential-payment-plan"]);
@@ -154,7 +160,7 @@ class PaymentPlanSeeder extends Seeder
         $plan->fill([
             'plot_id' => $plot->id,
             'name' => "{$size} Residential Payment Plan",
-            'description' => '15% booking, 15% confirmation, '.self::MONTHS.' monthly installments, a payment every 6 months and 25% on possession.',
+            'description' => 'Down payment, '.self::MONTHS.' monthly installments, a 6-month installment every 6 months and the final payment on registry. No booking fee.',
             'total_price' => $total,
             'full_payment_price' => $cash,
             'duration_months' => self::MONTHS,
@@ -167,14 +173,10 @@ class PaymentPlanSeeder extends Seeder
         ])->save();
 
         $items = [
-            [PaymentStageType::Booking, 'Booking', $booking, 1, 0, 'At the time of booking'],
-            [PaymentStageType::Advance, 'Confirmation', $confirmation, 1, null, 'On confirmation'],
+            [PaymentStageType::Advance, 'Down Payment', $down, 1, 0, 'Paid upfront — no booking fee'],
             [PaymentStageType::Monthly, 'Monthly Installments', $monthly, self::MONTHS, 1, self::MONTHS.' monthly installments'],
-            [PaymentStageType::After6Months, 'After 6 Months', $sixMonthly, 1, 6, 'Month 6'],
-            [PaymentStageType::After12Months, 'After 12 Months', $sixMonthly, 1, 12, 'Month 12'],
-            [PaymentStageType::After18Months, 'After 18 Months', $sixMonthly, 1, 18, 'Month 18'],
-            [PaymentStageType::After24Months, 'After 24 Months', $sixMonthly, 1, 24, 'Month 24'],
-            [PaymentStageType::EndPayment, 'Possession', $possession, 1, null, 'At possession'],
+            [PaymentStageType::HalfYearly, '6-Month Installments', $sixMonthly, self::SIX_MONTHLY, 6, 'Every 6 months (months 6, 12, 18 and 24)'],
+            [PaymentStageType::Registry, 'On Registry', $registry, 1, null, 'Final payment on registry — payment complete'],
         ];
 
         $plan->items()->delete();
@@ -198,37 +200,51 @@ class PaymentPlanSeeder extends Seeder
     protected function pages(): void
     {
         Page::query()->where('slug', 'plots')->update([
-            'subheading' => 'Residential plots in 3 Marla, 5 Marla and 10 Marla — each with a clear installment plan.',
+            'subheading' => 'Residential plots in 3 Marla, 5 Marla and 10 Marla — each with a clear installment plan and no booking fee.',
         ]);
 
         Page::query()->where('slug', 'installment-plans')->update([
-            'subheading' => '15% booking, 15% confirmation, 24 monthly installments, a payment every 6 months and 25% on possession.',
+            'subheading' => 'Down payment, monthly installments, 6-month installments and the final payment on registry. No booking fee.',
+        ]);
+
+        HomepageSection::query()->where('key', 'calculator')->update([
+            'subheading' => 'Select a plot size to see the total price, down payment, monthly and 6-month installments and the final payment on registry.',
+        ]);
+
+        HomepageSection::query()->where('key', 'installment_plans')->update([
+            'subheading' => 'Four simple steps: down payment, monthly installments, 6-month installments and the final payment on registry.',
         ]);
     }
 
     /**
-     * Pricing answers that match the flyer; the separate development/possession
-     * charges question is switched off because the flyer has no such charges.
+     * Pricing answers for the four-step plan; the separate development/possession
+     * charges question is switched off because there are no such charges.
      */
     protected function faqs(): void
     {
         $answers = [
-            'What does an installment plan include?' => 'Every plan has a 15% booking payment, a 15% confirmation payment, 24 monthly installments, a payment after every 6 months and 25% on possession. For example, a 3 Marla plot is PKR 2,700,000 in total: PKR 405,000 booking, PKR 405,000 confirmation, PKR 28,125 a month, PKR 135,000 every 6 months and PKR 675,000 on possession.',
+            'What does an installment plan include?' => 'Every plan has four steps and no booking fee: a 30% down payment, 24 monthly installments, a 6-month installment every 6 months (4 in total) and the final payment on registry. For example, a 3 Marla plot is PKR 2,700,000: PKR 810,000 down payment, PKR 28,125 a month, PKR 135,000 every 6 months and PKR 675,000 on registry.',
             'Can I pay the full amount at once?' => 'Yes. You get a 10% discount on cash payment.',
-            'When will I get possession?' => 'Possession for construction is given on payment of 30% of the total price.',
+            'When will I get possession?' => 'Possession for construction is given on payment of 30% of the total price — that is, once the down payment is made. The final payment is made on registry.',
         ];
 
         foreach ($answers as $question => $answer) {
             Faq::query()->where('question', $question)->update(['answer' => $answer]);
         }
 
+        Faq::query()->where('question', 'Which documents are required for booking?')->get()
+            ->each(fn (Faq $faq) => $faq->update(['answer' => str_replace('and the booking amount', 'and the down payment', $faq->answer)]));
+
         Faq::query()->where('question', 'Are development and possession charges included?')->update(['is_active' => false]);
 
-        Faq::query()->updateOrCreate(['question' => 'Is there an extra charge for category plots?'], [
-            'category' => 'Payments',
-            'answer' => 'Yes. 10% extra is charged on category plots.',
-            'sort_order' => (int) Faq::query()->where('question', 'Can I pay the full amount at once?')->value('sort_order'),
-            'is_active' => true,
-        ]);
+        $order = (int) Faq::query()->where('question', 'Can I pay the full amount at once?')->value('sort_order');
+
+        foreach ([
+            ['Is there a booking fee?', 'No. There is no booking fee — you start directly with the down payment.'],
+            ['When is the last payment made?', 'The last payment is made on registry. Once it is paid, your payment is complete.'],
+            ['Is there an extra charge for category plots?', 'Yes. 10% extra is charged on category plots.'],
+        ] as [$question, $answer]) {
+            Faq::query()->updateOrCreate(['question' => $question], ['category' => 'Payments', 'answer' => $answer, 'sort_order' => $order, 'is_active' => true]);
+        }
     }
 }

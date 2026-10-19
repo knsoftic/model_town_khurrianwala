@@ -91,7 +91,7 @@
                                                 <input data-focus class="a-input" x-model="item.title" :name="`items[${index}][title]`" required>
                                             </div>
                                             <div class="sm:col-span-5">
-                                                <label class="a-label">Amount <span x-show="['monthly','quarterly'].includes(item.type)">(each)</span></label>
+                                                <label class="a-label">Amount <span x-show="['monthly','quarterly','half_yearly'].includes(item.type)">(each)</span></label>
                                                 <div class="flex rounded-lg shadow-xs">
                                                     <span class="inline-flex items-center rounded-l-lg border border-r-0 border-slate-300 bg-slate-50 px-2 text-xs text-slate-500">{{ $currency }}</span>
                                                     <input type="number" min="0" step="1" class="a-input rounded-l-none" x-model.number="item.amount" @input="syncPercent(item)" :name="`items[${index}][amount]`" required>
@@ -101,11 +101,11 @@
                                                 <label class="a-label">% of total</label>
                                                 <input type="number" min="0" max="100" step="0.01" class="a-input" x-model.number="item.percentage" @input="syncAmount(item)">
                                             </div>
-                                            <div class="sm:col-span-4" x-show="['monthly','quarterly'].includes(item.type)">
+                                            <div class="sm:col-span-4" x-show="['monthly','quarterly','half_yearly'].includes(item.type)">
                                                 <label class="a-label">How many times</label>
                                                 <input type="number" min="1" max="600" class="a-input" x-model.number="item.occurrences" @input="syncPercent(item)">
                                             </div>
-                                            <input type="hidden" :name="`items[${index}][occurrences]`" :value="['monthly','quarterly'].includes(item.type) ? item.occurrences : 1">
+                                            <input type="hidden" :name="`items[${index}][occurrences]`" :value="['monthly','quarterly','half_yearly'].includes(item.type) ? item.occurrences : 1">
                                             <div class="sm:col-span-12 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
                                                 <span>Line total: <strong class="text-slate-800">{{ $currency }} <span x-text="format(lineTotal(item))"></span></strong></span>
                                                 <span x-show="item.due_label" x-text="item.due_label"></span>
@@ -139,7 +139,7 @@
                         </ol>
 
                         <div x-show="!items.length" class="rounded-xl border-2 border-dashed border-slate-200 px-6 py-10 text-center text-sm text-slate-500">
-                            No payment stages yet. Add one above, or load the standard 36-month template.
+                            No payment stages yet. Add one above, or load the standard template (down payment, monthly, 6-month installments, on registry).
                         </div>
                     </div>
                 </section>

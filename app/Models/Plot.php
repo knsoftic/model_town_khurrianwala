@@ -129,6 +129,29 @@ class Plot extends Model
         return $this->starting_price ?? $this->total_price;
     }
 
+    /**
+     * The default plan's stage of one of these types (needs activePlans.items loaded),
+     * so cards and tables use the plan's own wording — "Down Payment", "On Registry".
+     *
+     * @param  array<int, string>|string  $types
+     */
+    public function stage(array|string $types): ?PaymentScheduleItem
+    {
+        if (! $this->relationLoaded('activePlans') || ! ($plan = $this->activePlans->first())?->relationLoaded('items')) {
+            return null;
+        }
+
+        return $plan->items->first(fn (PaymentScheduleItem $item) => in_array($item->type?->value, (array) $types, true));
+    }
+
+    /**
+     * @param  array<int, string>|string  $types
+     */
+    public function stageTitle(array|string $types, string $fallback): string
+    {
+        return $this->stage($types)?->title ?: $fallback;
+    }
+
     public function frequencyLabel(): string
     {
         return self::FREQUENCIES[$this->payment_frequency] ?? ucfirst((string) $this->payment_frequency);

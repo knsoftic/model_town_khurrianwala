@@ -63,10 +63,11 @@ class InstallmentPlanService
             'down_payment' => $summary->amountFor('advance', 'full_payment') ?: null,
             'installment_amount' => $summary->installmentAmount ?: null,
             'installment_count' => $summary->installmentCount ?: null,
-            'payment_frequency' => $summary->installmentType === 'quarterly' ? 'quarterly' : 'monthly',
-            'after_6_months_payment' => $first('after_6_months'),
+            'payment_frequency' => in_array($summary->installmentType, ['quarterly', 'half_yearly'], true) ? $summary->installmentType : 'monthly',
+            // A 6-month installment series fills the "after 6 months" card field with its per-payment amount.
+            'after_6_months_payment' => $first('after_6_months') ?? $first('half_yearly'),
             'after_12_months_payment' => $first('after_12_months'),
-            'end_payment' => $summary->amountFor('end_payment') ?: null,
+            'end_payment' => $summary->amountFor('end_payment', 'registry') ?: null,
         ]);
     }
 }
