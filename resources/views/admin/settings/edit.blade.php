@@ -33,6 +33,32 @@
                 @include('admin.settings._appearance-preview')
             @endif
 
+            @if ($group === 'redirect')
+                @php
+                    $shortLink = url($values['redirect_path'] ?: 'leads');
+                    $redirectLive = filter_var($values['redirect_enabled'] ?? true, FILTER_VALIDATE_BOOLEAN) && filled($values['redirect_url'] ?? null);
+                @endphp
+                <div x-data="{ copied: false }" class="mb-6 flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold tracking-wider text-slate-500 uppercase">Your short link</p>
+                        <p class="mt-1 truncate font-mono text-lg font-semibold text-slate-900">{{ $shortLink }}</p>
+                        <p @class(['mt-1 text-sm', 'text-emerald-700' => $redirectLive, 'text-amber-700' => ! $redirectLive])>
+                            @if ($redirectLive)
+                                Visitors are sent to <span class="break-all">{{ $values['redirect_url'] }}</span>
+                            @else
+                                Not active yet — add a destination link below and switch it on.
+                            @endif
+                        </p>
+                    </div>
+                    <div class="flex shrink-0 gap-2">
+                        <button type="button" class="a-btn-secondary" @click="navigator.clipboard.writeText(@js($shortLink)); copied = true; setTimeout(() => copied = false, 2000)">
+                            <x-icon name="copy" class="size-4" /> <span x-text="copied ? 'Copied' : 'Copy'">Copy</span>
+                        </button>
+                        <a href="{{ $shortLink }}" target="_blank" rel="noopener" class="a-btn-secondary"><x-icon name="external-link" class="size-4" /> Open</a>
+                    </div>
+                </div>
+            @endif
+
             <x-admin.card :title="$definition['label']">
                 <div class="grid gap-5 sm:grid-cols-2">
                     @foreach ($fields as $key => $field)

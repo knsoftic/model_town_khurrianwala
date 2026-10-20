@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Front\RedirectLinkController;
 use App\Http\Middleware\EnsureAdminAccess;
 use App\Http\Middleware\NoIndex;
 use App\Http\Middleware\SecurityHeaders;
@@ -21,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix(config('cms.admin_path'))
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
+
+            // Admin-managed short link (e.g. /leads → WhatsApp channel). Registered without
+            // the web middleware, like any unmatched address, so it needs no session.
+            Route::fallback(RedirectLinkController::class)->name('redirect-link');
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

@@ -200,6 +200,18 @@ return [
             ],
         ],
 
+        // A short link on the website (e.g. /leads) that forwards visitors to any outside link.
+        'redirect' => [
+            'label' => 'Redirect Link',
+            'icon' => 'link',
+            'description' => 'A short link on your own website (e.g. mtkfsd.com/leads) that sends visitors straight to your WhatsApp channel, community, YouTube or any other link. Change the destination here at any time — the short link you have shared stays the same.',
+            'fields' => [
+                'redirect_enabled' => ['type' => 'boolean', 'label' => 'Redirect link is on', 'default' => '1', 'help' => 'When off, the short link shows the "page not found" page.'],
+                'redirect_path' => ['type' => 'text', 'label' => 'Short link name', 'slug' => true, 'default' => 'leads', 'help' => 'The part after your domain, e.g. leads → mtkfsd.com/leads. Letters, numbers and dashes only.'],
+                'redirect_url' => ['type' => 'url', 'label' => 'Send visitors to', 'default' => '', 'help' => 'Paste your WhatsApp channel or community invite link, YouTube or Facebook page, or any other https:// link.', 'rules' => ['regex:/^https?:\/\//i']],
+            ],
+        ],
+
         'whatsapp' => [
             'label' => 'WhatsApp',
             'icon' => 'message-circle',

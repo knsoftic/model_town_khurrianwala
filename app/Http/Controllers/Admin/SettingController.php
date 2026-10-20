@@ -8,6 +8,7 @@ use App\Services\ActivityLogger;
 use App\Services\MailSettings;
 use App\Services\SettingsService;
 use App\Support\MapEmbed;
+use App\Support\RedirectLink;
 use App\Support\UploadRules;
 use App\Support\VerificationTags;
 use Closure;
@@ -100,8 +101,9 @@ class SettingController extends Controller
     }
 
     /**
-     * IDs pulled out of pasted code for fields with an "extract" pattern
-     * (e.g. G-XXXXXXXXXX from the whole Google tag snippet).
+     * Cleaned-up input before validation: IDs pulled out of pasted code for fields with
+     * an "extract" pattern (e.g. G-XXXXXXXXXX from the whole Google tag snippet), and
+     * "slug" fields reduced to a bare path ("/Leads/" → "leads").
      *
      * @param  Collection<string, array<string, mixed>>  $fields
      * @return array<string, string>
@@ -113,6 +115,8 @@ class SettingController extends Controller
         foreach ($fields as $key => $field) {
             if (isset($field['extract']) && preg_match($field['extract'], (string) $request->input($key), $match)) {
                 $values[$key] = strtoupper($match[1]);
+            } elseif (($field['slug'] ?? false) && $request->has($key)) {
+                $values[$key] = RedirectLink::normalise($request->input($key));
             }
         }
 
@@ -155,6 +159,14 @@ class SettingController extends Controller
                     $fail("Paste the {$field['label']} meta tag, or only the code inside content=\"…\".");
                 }
             };
+        }
+
+        if ($field['slug'] ?? false) {
+            $rules = ['required', 'string', 'max:60', 'regex:'.RedirectLink::PATTERN, function (string $attribute, mixed $value, Closure $fail) {
+                if (is_string($value) && RedirectLink::isTaken($value)) {
+                    $fail("“{$value}” is already a page of the website. Choose another name, e.g. join, channel or leads.");
+                }
+            }];
         }
 
         if ($field['meta_list'] ?? false) {
