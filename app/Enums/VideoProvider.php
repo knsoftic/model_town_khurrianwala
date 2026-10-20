@@ -13,7 +13,7 @@ enum VideoProvider: string
         return match ($this) {
             self::YouTube => 'YouTube',
             self::Vimeo => 'Vimeo',
-            self::SelfHosted => 'Self-hosted (upload)',
+            self::SelfHosted => 'Upload from computer',
         };
     }
 

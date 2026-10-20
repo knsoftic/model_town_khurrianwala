@@ -18,6 +18,7 @@ import {
 } from 'chart.js';
 import scheduleBuilder from './admin/schedule-builder';
 import richEditor from './admin/rich-editor';
+import videoForm from './admin/video-form';
 
 Chart.register(ArcElement, BarController, BarElement, CategoryScale, DoughnutController, Filler, Legend, LinearScale, LineController, LineElement, PointElement, Tooltip);
 Chart.defaults.font.family = 'Inter, ui-sans-serif, system-ui, sans-serif';
@@ -40,6 +41,7 @@ async function request(url, method = 'POST', body = {}) {
 Alpine.plugin(collapse);
 Alpine.data('scheduleBuilder', scheduleBuilder);
 Alpine.data('richEditor', richEditor);
+Alpine.data('videoForm', videoForm);
 
 Alpine.store('toast', {
     items: [],
