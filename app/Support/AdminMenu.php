@@ -50,6 +50,7 @@ final class AdminMenu
                 ['Website Settings', 'settings', 'admin.settings.edit', ['group' => 'general'], 'settings', ['admin.settings.*'], null, fn () => request()->route('group') !== 'appearance'],
                 ['Appearance', 'palette', 'admin.settings.edit', ['group' => 'appearance'], 'settings', ['admin.settings.*'], null, fn () => request()->route('group') === 'appearance'],
                 ['Social Links', 'share-2', 'admin.social-links.index', [], 'settings', ['admin.social-links.*']],
+                ['SEO Guide', 'book-open', 'admin.seo-guide', [], 'settings', ['admin.seo-guide*']],
             ]],
             ['Administration', [
                 ['Reports', 'chart-pie', 'admin.reports.index', [], 'reports', ['admin.reports.*']],

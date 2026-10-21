@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\ProjectFeatureController;
 use App\Http\Controllers\Admin\ReorderController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SeoGuideController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\StatisticController;
@@ -143,6 +144,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('settings/{group}', [SettingController::class, 'edit'])->name('settings.edit');
         Route::put('settings/{group}', [SettingController::class, 'update'])->name('settings.update');
         Route::post('settings/notifications/test-email', [SettingController::class, 'testEmail'])->name('settings.test-email');
+        Route::get('seo-guide', [SeoGuideController::class, 'index'])->name('seo-guide');
+        Route::post('seo-guide/link', [SeoGuideController::class, 'resetLink'])->name('seo-guide.link');
         Route::resource('social-links', SocialLinkController::class)->except(['show', 'create', 'edit']);
     });
 

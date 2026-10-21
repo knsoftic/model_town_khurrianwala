@@ -14,7 +14,7 @@ use Illuminate\Database\Seeder;
 
 /**
  * The real project details for Model Town Khurrianwala (location, contact numbers,
- * amenities and website copy). Safe to run again: it updates content in place and
+ * amenities and website copy; SEO text is in SeoSeeder). Safe to run again: it updates content in place and
  * never touches users, leads, bookings, plot prices or uploaded images.
  *
  *   php artisan db:seed --class=ProjectDataSeeder --force
@@ -99,17 +99,11 @@ class ProjectDataSeeder extends Seeder
         $settings->update('footer', [
             'footer_description' => 'A gated community on Main Bazar Khurrianwala, Jhumra Road, Faisalabad — with 50 ft and 30 ft wide roads, parks, mosque, gas, electricity, mineral water and 24/7 security.',
         ]);
-
-        $settings->update('seo', [
-            'seo_title' => 'Model Town Khurrianwala Faisalabad — Plots on Jhumra Road',
-            'seo_description' => 'Gated community on Main Bazar Khurrianwala, Jhumra Road, Faisalabad — near the Motorway. 50 ft & 30 ft roads, parks, gas, 24/7 security. Call 0300-8653838.',
-            'seo_keywords' => 'Model Town Khurrianwala, Khurrianwala plots, Jhumra Road plots, Faisalabad housing society, plots for sale in Faisalabad, gated community Faisalabad, plots near Motorway Faisalabad, installment plots Khurrianwala',
-        ]);
     }
 
     protected function location(): void
     {
-        $location = Location::query()->updateOrCreate(['slug' => 'khurrianwala-main-site'], [
+        Location::query()->updateOrCreate(['slug' => 'khurrianwala-main-site'], [
             'name' => 'Model Town Khurrianwala, Faisalabad',
             'city' => 'Faisalabad',
             'area' => 'Khurrianwala',
@@ -133,11 +127,6 @@ class ProjectDataSeeder extends Seeder
             'distance_main_road' => 'On Jhumra Road',
             'is_featured' => true,
             'is_active' => true,
-        ]);
-
-        $location->seo()->updateOrCreate([], [
-            'title' => 'Location — Main Bazar Khurrianwala, Jhumra Road, Faisalabad',
-            'description' => 'Model Town Khurrianwala is on Main Bazar Khurrianwala, Jhumra Road — between the Expressway and GT Road, and the closest society to the Motorway.',
         ]);
     }
 
@@ -225,16 +214,16 @@ class ProjectDataSeeder extends Seeder
                 .'<h3>Location</h3><ul><li>Main Bazar Khurrianwala, Jhumra Road</li><li>Between the Expressway and GT Road</li><li>Closest society to the Motorway</li></ul>'
                 .'<h3>Amenities</h3><ul><li>50 ft and 30 ft wide roads</li><li>Beautiful parks and green belts</li><li>Gated community with a boundary wall</li><li>24/7 security</li><li>Mosque</li><li>Electricity and gas</li><li>Mineral water supply</li><li>Sewerage system</li><li>Solid waste management</li><li>Public buildings</li></ul>'
                 .'<p>Ideal for building your home and for investment. For more information, call <a href="tel:+923008653838">0300-8653838</a> or <a href="tel:+923088653838">0308-8653838</a>.</p>',
-        ], 'About Model Town Khurrianwala — Gated Community in Faisalabad', 'Gated community on Main Bazar Khurrianwala, Jhumra Road, with wide roads, parks, mosque, utilities and 24/7 security.');
+        ]);
 
         $this->page('locations', [
             'heading' => 'Main Bazar Khurrianwala, Jhumra Road',
             'subheading' => 'Between the Expressway and GT Road — the closest society to the Motorway.',
-        ], 'Location — Model Town Khurrianwala, Jhumra Road, Faisalabad', 'Find Model Town Khurrianwala on Main Bazar Khurrianwala, Jhumra Road — between the Expressway and GT Road, near the Motorway.');
+        ]);
 
         $this->page('contact', [
             'subheading' => 'Call 0300-8653838 or 0308-8653838, send a WhatsApp message, or visit us on Main Bazar Khurrianwala, Jhumra Road.',
-        ], 'Contact Model Town Khurrianwala — 0300-8653838', 'Call 0300-8653838 or 0308-8653838 for plot prices and availability at Model Town Khurrianwala, Jhumra Road, Faisalabad.');
+        ]);
     }
 
     /**
@@ -292,13 +281,12 @@ class ProjectDataSeeder extends Seeder
     /**
      * @param  array<string, mixed>  $attributes
      */
-    protected function page(string $slug, array $attributes, string $seoTitle, string $seoDescription): void
+    protected function page(string $slug, array $attributes): void
     {
         $page = Page::query()->where('slug', $slug)->first();
 
         if ($page) {
             $page->update($attributes);
-            $page->seo()->updateOrCreate([], ['title' => $seoTitle, 'description' => $seoDescription]);
         }
     }
 }

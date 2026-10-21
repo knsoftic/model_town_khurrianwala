@@ -3,6 +3,7 @@
 use App\Http\Controllers\Front\RedirectLinkController;
 use App\Http\Middleware\EnsureAdminAccess;
 use App\Http\Middleware\NoIndex;
+use App\Http\Middleware\RobotsTag;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -34,7 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'noindex' => NoIndex::class,
         ]);
 
-        $middleware->web(append: [SecurityHeaders::class]);
+        $middleware->web(append: [SecurityHeaders::class, RobotsTag::class]);
 
         $middleware->redirectGuestsTo(fn () => route('admin.login'));
         $middleware->redirectUsersTo(fn () => route('admin.dashboard'));

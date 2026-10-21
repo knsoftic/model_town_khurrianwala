@@ -187,5 +187,36 @@ Alpine.data('slugField', (initial = '', locked = false) => ({
     },
 }));
 
+/** Keyword list with an Add button (x-admin.keywords); posts the keywords comma-separated. */
+const splitKeywords = (text) =>
+    text
+        .split(/[,\n]+/)
+        .map((keyword) => keyword.replace(/\s+/g, ' ').trim())
+        .filter(Boolean);
+
+Alpine.data('keywordInput', (initial = '') => ({
+    keywords: [],
+    draft: '',
+    init() {
+        this.push(splitKeywords(initial));
+    },
+    get value() {
+        return [...this.keywords, ...splitKeywords(this.draft)].join(', ');
+    },
+    push(list) {
+        list.forEach((keyword) => {
+            if (!this.keywords.some((existing) => existing.toLowerCase() === keyword.toLowerCase())) this.keywords.push(keyword);
+        });
+    },
+    add() {
+        this.push(splitKeywords(this.draft));
+        this.draft = '';
+        this.$refs.input.focus();
+    },
+    remove(index) {
+        this.keywords.splice(index, 1);
+    },
+}));
+
 window.Alpine = Alpine;
 Alpine.start();

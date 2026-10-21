@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Concerns;
 
 use App\Services\HtmlSanitizer;
 use App\Services\MediaUploader;
+use App\Support\Keywords;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,7 @@ trait HandlesMedia
     {
         $model->loadMissing('seo');
         $data = (array) $request->input('seo', []);
+        $data['keywords'] = Keywords::normalise($data['keywords'] ?? null) ?: null;
         $data['og_image'] = $this->media($request, 'seo_og_image', $model->seo?->og_image, 'seo');
 
         $model->syncSeo($data);

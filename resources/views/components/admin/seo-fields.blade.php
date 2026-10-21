@@ -7,7 +7,7 @@
     <div x-show="open" x-collapse class="grid gap-4 sm:grid-cols-2">
         <x-admin.input name="seo[title]" label="SEO title" :value="$seo?->title" maxlength="255" class="sm:col-span-2" />
         <x-admin.textarea name="seo[description]" label="Meta description" :value="$seo?->description" rows="2" maxlength="500" class="sm:col-span-2" />
-        <x-admin.input name="seo[keywords]" label="Meta keywords" :value="$seo?->keywords" class="sm:col-span-2" help="Comma separated." />
+        <x-admin.keywords name="seo[keywords]" label="Meta keywords" :value="$seo?->keywords" class="sm:col-span-2" help="Type a keyword and press Add (or Enter). Leave empty to use the website keywords from Settings → SEO." />
         <x-admin.input name="seo[canonical_url]" label="Canonical URL" :value="$seo?->canonical_url" type="url" placeholder="https://" />
         <x-admin.select name="seo[robots]" label="Robots" :value="$seo?->robots" :options="['' => 'Default (index, follow)', 'noindex, follow' => 'noindex, follow', 'noindex, nofollow' => 'noindex, nofollow']" />
         <x-admin.input name="seo[og_title]" label="Open Graph title" :value="$seo?->og_title" />

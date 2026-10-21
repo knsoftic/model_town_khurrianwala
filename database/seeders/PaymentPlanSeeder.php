@@ -149,7 +149,7 @@ class PaymentPlanSeeder extends Seeder
         $plot->save();
 
         $plot->seo()->updateOrCreate([], [
-            'title' => "{$size} Plot in Model Town Khurrianwala — {$money($total)} on Installments",
+            'title' => "{$size} Plot for Sale in Faisalabad",
             'description' => "{$size} residential plot: total {$money($total)}, down payment {$money($down)}, {$money($monthly)} monthly. No booking fee, 10% off on cash payment.",
         ]);
 

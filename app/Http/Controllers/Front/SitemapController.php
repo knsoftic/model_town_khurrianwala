@@ -7,18 +7,23 @@ use App\Models\Location;
 use App\Models\NavigationItem;
 use App\Models\Page;
 use App\Models\Plot;
+use App\Services\SeoService;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
     public function index(): Response
     {
-        $disabled = Page::query()->where('is_active', false)->pluck('slug')->all();
+        $pages = Page::query()->get(['slug', 'is_active', 'updated_at'])->keyBy('slug');
 
         $urls = collect(NavigationItem::ROUTES)
-            ->reject(fn ($meta) => $meta[1] && in_array($meta[1], $disabled, true))
-            ->keys()
-            ->map(fn (string $route) => ['loc' => route($route), 'lastmod' => null, 'priority' => $route === 'home' ? '1.0' : '0.8']);
+            ->reject(fn ($meta) => $meta[1] && $pages->get($meta[1])?->is_active === false)
+            ->map(fn ($meta, string $route) => [
+                'loc' => route($route),
+                'lastmod' => $pages->get($meta[1] ?? 'home')?->updated_at,
+                'priority' => $route === 'home' ? '1.0' : '0.8',
+            ])
+            ->values();
 
         Plot::query()->active()->ordered()->get(['slug', 'updated_at'])
             ->each(fn (Plot $plot) => $urls->push(['loc' => route('plots.show', $plot), 'lastmod' => $plot->updated_at, 'priority' => '0.9']));
@@ -29,9 +34,17 @@ class SitemapController extends Controller
         return response()->view('front.sitemap', ['urls' => $urls], 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
     }
 
-    public function robots(): Response
+    /**
+     * robots.txt: everything open to crawlers plus any extra rules from Settings → SEO, or
+     * everything blocked while "Show this website in search engines" is off.
+     */
+    public function robots(SeoService $seo): Response
     {
-        $lines = ['User-agent: *', 'Disallow:', '', 'Sitemap: '.route('sitemap')];
+        $extra = trim(str_replace("\r", '', (string) setting('robots_txt_extra')));
+
+        $lines = $seo->indexable()
+            ? ['User-agent: *', 'Disallow:', ...($extra !== '' ? explode("\n", $extra) : []), '', 'Sitemap: '.route('sitemap')]
+            : ['User-agent: *', 'Disallow: /'];
 
         return response(implode("\n", $lines)."\n", 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
     }

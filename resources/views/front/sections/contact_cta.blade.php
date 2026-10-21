@@ -5,7 +5,7 @@
 
 <section id="contact-cta" class="relative isolate overflow-hidden bg-primary py-20 text-white sm:py-28">
     @if ($image)
-        <img {{ img_attrs($image, '100vw', [640, 960, 1280, 1920]) }} alt="" loading="lazy" class="absolute inset-0 -z-20 size-full object-cover opacity-30">
+        <img {{ img_attrs($image, '100vw', [640, 960, 1280, 1920]) }} alt="{{ setting('site_name') }}" loading="lazy" class="absolute inset-0 -z-20 size-full object-cover opacity-30">
     @endif
     <div class="pointer-events-none absolute inset-0 -z-10 bg-grid-light"></div>
     <div class="pointer-events-none absolute -right-40 -bottom-40 -z-10 size-[560px] rounded-full bg-accent/20 blur-3xl"></div>

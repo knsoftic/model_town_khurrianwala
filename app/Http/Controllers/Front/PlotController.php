@@ -40,9 +40,7 @@ class PlotController extends FrontController
             'features' => ProjectFeature::query()->active()->ordered()->limit(8)->get(),
             'testimonials' => Testimonial::query()->active()->with('plot')->where('plot_id', $plot->id)->ordered()->limit(3)->get(),
             'faqs' => Faq::query()->active()->ordered()->limit(5)->get(),
-            'seo' => $this->seoFor($plot, [
-                'title' => $plot->title,
-                'description' => $plot->short_description,
+            'seo' => $this->seoFor($plot, $plot->seoDefaults() + [
                 'image' => $plot->image,
                 'type' => 'product',
                 'schemas' => [$this->productSchema($plot)],

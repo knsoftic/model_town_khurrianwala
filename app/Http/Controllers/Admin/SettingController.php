@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ActivityLogger;
 use App\Services\MailSettings;
 use App\Services\SettingsService;
+use App\Support\Keywords;
 use App\Support\MapEmbed;
 use App\Support\RedirectLink;
 use App\Support\UploadRules;
@@ -69,6 +70,7 @@ class SettingController extends Controller
                 default:
                     $values[$key] = match (true) {
                         $key === 'google_maps_embed' => MapEmbed::extract($value) ?? '',
+                        $field['type'] === 'keywords' => Keywords::normalise($value),
                         isset($field['meta']) => VerificationTags::code($value) ?? '',
                         (bool) ($field['meta_list'] ?? false) => VerificationTags::normalise($value),
                         default => (string) ($value ?? ''),
@@ -140,6 +142,7 @@ class SettingController extends Controller
             'select' => ['nullable', Rule::in(array_keys($field['options'] ?? []))],
             'image' => ($field['mimes'] ?? null) === 'png,ico' ? UploadRules::favicon() : UploadRules::image(),
             'code' => ['nullable', 'string', 'max:50000'],
+            'keywords' => ['nullable', 'string', 'max:2000'],
             'textarea' => ['nullable', 'string', 'max:5000'],
             'password' => ['nullable', 'string', 'max:255'],
             default => ['nullable', 'string', 'max:255'],

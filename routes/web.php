@@ -8,6 +8,7 @@ use App\Http\Controllers\Front\LeadController;
 use App\Http\Controllers\Front\LocationController;
 use App\Http\Controllers\Front\PageController;
 use App\Http\Controllers\Front\PlotController;
+use App\Http\Controllers\Front\SeoGuideController;
 use App\Http\Controllers\Front\SitemapController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,3 +41,6 @@ Route::middleware('throttle:forms')->group(function () {
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots']);
 Route::get('/llms.txt', [SitemapController::class, 'llms']);
+
+// Private link to the admin SEO guide that opens without a login (Settings → SEO Guide).
+Route::get('/seo-guide/{token}', [SeoGuideController::class, 'show'])->middleware('noindex')->name('seo-guide.shared');

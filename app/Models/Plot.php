@@ -130,6 +130,42 @@ class Plot extends Model
     }
 
     /**
+     * Title, description and keywords of the plot page when its SEO box is left empty
+     * (needs location loaded).
+     *
+     * @return array{title: string, description: string|null, keywords: string}
+     */
+    public function seoDefaults(): array
+    {
+        return [
+            'title' => $this->location?->city ? "{$this->title} in {$this->location->city}" : (string) $this->title,
+            'description' => $this->short_description,
+            'keywords' => implode(', ', $this->seoKeywords()),
+        ];
+    }
+
+    /**
+     * Search phrases for this plot size ("5 marla plot for sale in Faisalabad"), used as the
+     * plot page's keywords when none are entered in its SEO box.
+     *
+     * @return array<int, string>
+     */
+    public function seoKeywords(): array
+    {
+        $size = mb_strtolower((string) $this->size_label);
+        $in = ($city = $this->location?->city) ? " in {$city}" : '';
+        $area = $this->location?->area;
+
+        return array_values(array_filter([
+            "{$size} plot for sale{$in}",
+            "{$size} plot on installments{$in}",
+            "{$size} plot price{$in}",
+            $area && $area !== $city ? "{$size} plot in {$area}" : null,
+            "{$size} plot ".setting('site_name'),
+        ]));
+    }
+
+    /**
      * The default plan's stage of one of these types (needs activePlans.items loaded),
      * so cards and tables use the plan's own wording — "Down Payment", "On Registry".
      *

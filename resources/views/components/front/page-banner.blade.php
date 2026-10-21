@@ -5,12 +5,18 @@
     $heading ??= $page?->heading ?? $page?->name;
     $subheading ??= $page?->subheading;
     $imagePath = $image ?? $page?->banner_image;
+    $seoService = app(\App\Services\SeoService::class);
 @endphp
+
+{{-- The same trail as the visible breadcrumb, for Google's search results. --}}
+@if ($crumbs)
+    @push('head')<script type="application/ld+json">{!! $seoService->encode($seoService->breadcrumbSchema($crumbs)) !!}</script>@endpush
+@endif
 
 <section class="relative isolate overflow-hidden bg-primary text-white">
     @if ($imagePath)
         @push('head'){{ img_preload($imagePath, '100vw', [640, 960, 1280, 1920]) }}@endpush
-        <img {{ img_attrs($imagePath, '100vw', [640, 960, 1280, 1920]) }} alt="" class="absolute inset-0 -z-20 size-full object-cover" fetchpriority="high">
+        <img {{ img_attrs($imagePath, '100vw', [640, 960, 1280, 1920]) }} alt="{{ $heading ? $heading.' — '.setting('site_name') : setting('site_name') }}" class="absolute inset-0 -z-20 size-full object-cover" fetchpriority="high">
     @endif
     <div class="absolute inset-0 -z-10 bg-gradient-to-r from-primary via-primary/90 to-primary/55"></div>
     <div class="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-primary/60 to-transparent"></div>

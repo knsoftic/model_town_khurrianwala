@@ -25,7 +25,7 @@
         @if (! empty($page->images))
             <div class="container-x mt-14 grid grid-cols-2 gap-4 md:grid-cols-4">
                 @foreach ($page->images as $image)
-                    <img {{ img_attrs($image, '(min-width: 1024px) 25vw, 50vw', [320, 480, 640]) }} alt="" loading="lazy" class="aspect-square w-full rounded-brand-lg object-cover">
+                    <img {{ img_attrs($image, '(min-width: 1024px) 25vw, 50vw', [320, 480, 640]) }} alt="{{ setting('site_name') }} — photo {{ $loop->iteration }}" loading="lazy" class="aspect-square w-full rounded-brand-lg object-cover">
                 @endforeach
             </div>
         @endif

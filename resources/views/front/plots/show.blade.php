@@ -68,7 +68,7 @@
                         <div class="scrollbar-none mt-3 flex gap-3 overflow-x-auto">
                             @foreach ($gallery as $i => $path)
                                 <button type="button" @click="active = {{ $i }}" :class="active === {{ $i }} ? 'ring-2 ring-accent' : 'opacity-70 hover:opacity-100'" class="shrink-0 overflow-hidden rounded-brand-sm transition">
-                                    <img {{ img_attrs($path, '96px', [96, 192, 320]) }} alt="" loading="lazy" class="h-16 w-24 object-cover">
+                                    <img {{ img_attrs($path, '96px', [96, 192, 320]) }} alt="Show {{ $plot->title }} image {{ $i + 1 }}" loading="lazy" class="h-16 w-24 object-cover">
                                 </button>
                             @endforeach
                         </div>

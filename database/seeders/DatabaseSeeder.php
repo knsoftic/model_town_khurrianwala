@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             PaymentPlanSeeder::class,
         ]);
 
+        $this->callWith(SeoSeeder::class, ['force' => true]);
+
         if (! app()->isProduction()) {
             $this->call(DemoCrmSeeder::class);
         }

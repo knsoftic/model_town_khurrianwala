@@ -59,6 +59,24 @@
                 </div>
             @endif
 
+            @if ($group === 'seo')
+                <div class="mb-6 grid gap-3 sm:grid-cols-3">
+                    @foreach ([
+                        ['SEO Guide', 'Checklist and step-by-step help', route('admin.seo-guide'), 'book-open', false],
+                        ['Sitemap', str_replace(['https://', 'http://'], '', route('sitemap')), route('sitemap'), 'file-search', true],
+                        ['robots.txt', str_replace(['https://', 'http://'], '', url('robots.txt')), url('robots.txt'), 'file-search', true],
+                    ] as [$label, $text, $url, $icon, $external])
+                        <a href="{{ $url }}" @if ($external) target="_blank" rel="noopener" @endif class="flex min-w-0 items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 hover:shadow-card">
+                            <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-navy-900 text-gold-400"><x-icon :name="$icon" class="size-5" /></span>
+                            <span class="min-w-0">
+                                <span class="block text-sm font-semibold text-slate-900">{{ $label }}</span>
+                                <span class="block truncate text-xs text-slate-500">{{ $text }}</span>
+                            </span>
+                        </a>
+                    @endforeach
+                </div>
+            @endif
+
             <x-admin.card :title="$definition['label']">
                 <div class="grid gap-5 sm:grid-cols-2">
                     @foreach ($fields as $key => $field)

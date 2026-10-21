@@ -2,7 +2,7 @@
 
 {{--
     Renders one field from a definition array (config/cms.php settings or App\Support\SectionFields):
-    type = text|textarea|email|url|tel|number|color|boolean|select|image|video|rich|code|password.
+    type = text|textarea|email|url|tel|number|color|boolean|select|image|video|rich|code|password|keywords.
     Image/video uploads post under $fileName (defaults to $name) with a "remove_<fileName>" flag.
 --}}
 @php
@@ -10,10 +10,14 @@
     $label = $field['label'] ?? str($name)->afterLast('[')->rtrim(']')->headline();
     $help = $field['help'] ?? null;
     $fileName ??= $name;
-    $span = in_array($type, ['textarea', 'code', 'rich', 'image', 'video'], true) ? 'sm:col-span-2' : '';
+    $span = in_array($type, ['textarea', 'code', 'rich', 'image', 'video', 'keywords'], true) ? 'sm:col-span-2' : '';
 @endphp
 
 @switch($type)
+    @case('keywords')
+        <x-admin.keywords :name="$name" :label="$label" :value="$value" :help="$help" :class="$span" />
+        @break
+
     @case('textarea')
         <x-admin.textarea :name="$name" :label="$label" :value="$value" :help="$help" rows="3" :class="$span" />
         @break

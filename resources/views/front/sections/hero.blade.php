@@ -21,7 +21,7 @@
         @if ($first)
             @push('head'){{ img_preload($imagePath, '100vw', [640, 960, 1280, 1920]) }}@endpush
         @endif
-        <img {{ img_attrs($imagePath, '100vw', [640, 960, 1280, 1920]) }} alt="" class="absolute inset-0 -z-20 size-full object-cover" fetchpriority="high">
+        <img {{ img_attrs($imagePath, '100vw', [640, 960, 1280, 1920]) }} alt="{{ setting('site_name') }} — {{ setting('site_tagline') }}" class="absolute inset-0 -z-20 size-full object-cover" fetchpriority="high">
     @endif
     <div class="absolute inset-0 -z-10 bg-primary" style="opacity: {{ $overlay }}"></div>
     <div class="absolute inset-0 -z-10 bg-gradient-to-t from-primary via-transparent to-primary/40"></div>

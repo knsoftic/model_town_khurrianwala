@@ -12,7 +12,7 @@ class HomeController extends FrontController
         $page = $this->page('home');
 
         return view('front.home', $homepage->build() + [
-            'seo' => $this->seoFor($page->exists ? $page : null),
+            'seo' => $this->seoFor($page->exists ? $page : null, ['schemas' => [$this->seo->websiteSchema()]]),
         ]);
     }
 }
