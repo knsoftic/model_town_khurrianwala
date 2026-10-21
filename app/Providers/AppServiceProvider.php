@@ -66,6 +66,9 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Gate::define('super-admin', fn (User $user) => $user->isSuperAdmin());
+
+        // The Leads section: managers see every lead, agents only their own (Lead::visibleTo).
+        Gate::define('leads.access', fn (User $user) => $user->hasPermission('leads') || $user->hasPermission('my_leads'));
     }
 
     protected function registerRateLimiters(): void

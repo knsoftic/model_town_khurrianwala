@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\HomepageSectionController;
 use App\Http\Controllers\Admin\InstallmentPlanController;
 use App\Http\Controllers\Admin\LeadController;
+use App\Http\Controllers\Admin\LeadFieldController;
+use App\Http\Controllers\Admin\LeadFollowUpController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\NoteController;
@@ -84,13 +86,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::resource('installment-plans', InstallmentPlanController::class)->except('show');
     });
 
-    // Leads, contact messages, newsletter
-    Route::middleware('can:leads')->group(function () {
-        Route::get('leads/export/{format}', [LeadController::class, 'export'])->whereIn('format', ['csv', 'xlsx'])->name('leads.export');
-        Route::post('leads/bulk', [LeadController::class, 'bulk'])->name('leads.bulk');
+    // Leads: staff with "leads" see every lead, agents ("my_leads") only their own (checked per lead).
+    Route::middleware('can:leads.access')->group(function () {
+        Route::get('leads/export/{format}', [LeadController::class, 'export'])->whereIn('format', ['csv', 'xlsx', 'docx'])->name('leads.export');
         Route::patch('leads/{lead}/quick', [LeadController::class, 'quickUpdate'])->name('leads.quick');
         Route::post('leads/{lead}/notes', [NoteController::class, 'storeForLead'])->name('leads.notes.store');
+        Route::post('leads/{lead}/follow-ups', [LeadFollowUpController::class, 'store'])->name('leads.follow-ups.store');
+        Route::patch('follow-ups/{followUp}', [LeadFollowUpController::class, 'update'])->name('follow-ups.update');
+        Route::delete('follow-ups/{followUp}', [LeadFollowUpController::class, 'destroy'])->name('follow-ups.destroy');
         Route::resource('leads', LeadController::class)->except('edit');
+    });
+
+    // Lead form fields, bulk changes, contact messages, newsletter
+    Route::middleware('can:leads')->group(function () {
+        Route::post('leads/bulk', [LeadController::class, 'bulk'])->name('leads.bulk');
+        Route::resource('lead-fields', LeadFieldController::class)->except('show');
 
         Route::post('messages/{message}/convert', [ContactMessageController::class, 'convert'])->name('messages.convert');
         Route::resource('messages', ContactMessageController::class)->only(['index', 'show', 'destroy']);

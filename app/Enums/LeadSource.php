@@ -12,6 +12,7 @@ enum LeadSource: string
     case Calculator = 'calculator';
     case WhatsApp = 'whatsapp';
     case Phone = 'phone';
+    case Facebook = 'facebook';
     case WalkIn = 'walk_in';
     case Referral = 'referral';
     case Other = 'other';
@@ -27,6 +28,7 @@ enum LeadSource: string
             self::Calculator => 'Payment Calculator',
             self::WhatsApp => 'WhatsApp',
             self::Phone => 'Phone Call',
+            self::Facebook => 'Facebook Ad',
             self::WalkIn => 'Walk-in',
             self::Referral => 'Referral',
             self::Other => 'Other',

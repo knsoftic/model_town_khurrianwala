@@ -20,6 +20,7 @@ class Permission extends Model
         'plots' => ['Plots', 'Manage plot sizes, prices, availability and featured plots'],
         'installments' => ['Installments', 'Manage installment plans and payment schedules'],
         'leads' => ['Leads', 'View and manage leads, contact messages and callbacks'],
+        'my_leads' => ['My Leads', 'Add leads and work only on the leads they added or that are assigned to them'],
         'bookings' => ['Bookings', 'Review and manage plot booking requests'],
         'testimonials' => ['Testimonials', 'Manage happy client testimonials'],
         'gallery' => ['Gallery', 'Manage gallery albums, images and videos'],

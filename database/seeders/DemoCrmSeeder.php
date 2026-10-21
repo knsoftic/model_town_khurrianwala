@@ -36,10 +36,13 @@ class DemoCrmSeeder extends Seeder
             $lead = Lead::factory()->create([
                 'plot_id' => $plot->id,
                 'assigned_to' => mt_rand(0, 100) < 60 ? $staff[array_rand($staff)] : null,
-                'follow_up_date' => mt_rand(0, 100) < 30 ? Carbon::now()->addDays(mt_rand(-5, 14)) : null,
                 'created_at' => $created,
                 'updated_at' => $created,
             ]);
+
+            if (mt_rand(0, 100) < 30) {
+                $lead->followUps()->create(['user_id' => $lead->assigned_to, 'due_date' => Carbon::now()->addDays(mt_rand(-5, 14))]);
+            }
 
             if ($created->greaterThan(now()->subDays(4))) {
                 $lead->update(['status' => 'new']);

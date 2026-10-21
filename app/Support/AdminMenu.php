@@ -20,7 +20,8 @@ final class AdminMenu
                 ['Dashboard', 'layout-dashboard', 'admin.dashboard', [], 'dashboard', ['admin.dashboard']],
             ]],
             ['Sales & CRM', [
-                ['Leads', 'users-round', 'admin.leads.index', [], 'leads', ['admin.leads.*'], 'leads'],
+                ['Leads', 'users-round', 'admin.leads.index', [], 'leads.access', ['admin.leads.*'], 'leads'],
+                ['Lead Form Fields', 'list-plus', 'admin.lead-fields.index', [], 'leads', ['admin.lead-fields.*']],
                 ['Booking Requests', 'bookmark-check', 'admin.bookings.index', [], 'bookings', ['admin.bookings.*'], 'bookings'],
                 ['Contact Messages', 'inbox', 'admin.messages.index', [], 'leads', ['admin.messages.*'], 'messages'],
                 ['Subscribers', 'mail-plus', 'admin.subscribers.index', [], 'leads', ['admin.subscribers.*']],

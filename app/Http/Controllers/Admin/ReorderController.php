@@ -9,6 +9,7 @@ use App\Models\GalleryAlbum;
 use App\Models\GalleryImage;
 use App\Models\HomepageSection;
 use App\Models\InstallmentPlan;
+use App\Models\LeadField;
 use App\Models\Location;
 use App\Models\NavigationItem;
 use App\Models\NewsletterSubscriber;
@@ -56,6 +57,7 @@ class ReorderController extends Controller
         'social-links' => [SocialLink::class, 'settings', ['is_active'], true],
         'users' => [User::class, 'users', ['is_active'], false],
         'subscribers' => [NewsletterSubscriber::class, 'leads', ['is_active'], false],
+        'lead-fields' => [LeadField::class, 'leads', ['is_active', 'is_required', 'show_in_list'], true],
     ];
 
     public function reorder(Request $request, string $resource, ActivityLogger $logger): JsonResponse

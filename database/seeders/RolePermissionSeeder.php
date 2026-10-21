@@ -23,6 +23,8 @@ class RolePermissionSeeder extends Seeder
                 ['dashboard', 'plots', 'installments', 'leads', 'bookings', 'reports']],
             'support-staff' => ['Support Staff', 'Responds to leads and contact messages.', false,
                 ['dashboard', 'leads', 'bookings']],
+            'agent' => ['Agent', 'Adds leads (e.g. from Facebook ads) and follows up on their own leads only.', false,
+                ['my_leads']],
         ];
 
         foreach ($roles as $slug => [$name, $description, $isSuper, $permissions]) {

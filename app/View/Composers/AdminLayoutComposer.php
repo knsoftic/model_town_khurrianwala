@@ -21,7 +21,7 @@ class AdminLayoutComposer
         }
 
         $badges = [
-            'leads' => $user->can('leads') ? Lead::query()->where('status', LeadStatus::New)->count() : 0,
+            'leads' => $user->can('leads.access') ? Lead::query()->visibleTo($user)->where('status', LeadStatus::New)->count() : 0,
             'bookings' => $user->can('bookings') ? BookingRequest::query()->where('status', BookingStatus::Pending)->count() : 0,
             'messages' => $user->can('leads') ? ContactMessage::query()->whereNull('read_at')->count() : 0,
         ];
