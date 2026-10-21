@@ -1,5 +1,5 @@
 {{--
-    Numbered how-to steps. Each step: title, text, optional points (list), code (text to copy)
+    Numbered how-to steps (text comes from _guide, in Roman Urdu). Each step: title, text, optional points (list), code (text to copy)
     and links [label, url, admin?] — admin links open the admin panel (sign-in needed).
 --}}
 <ol class="space-y-0">

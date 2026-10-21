@@ -29,6 +29,6 @@ class SeoGuideController extends Controller
         $this->guide->newShareToken();
         $logger->log('updated', 'Made a new private link for the SEO guide');
 
-        return redirect()->route('admin.seo-guide')->with('success', 'New link created. The old link no longer opens the guide.');
+        return redirect()->route('admin.seo-guide')->with('success', 'Naya link ban gaya. Purana link ab guide nahi kholta.');
     }
 }

@@ -1,5 +1,7 @@
 {{--
-    SEO guide content, shared by the admin page and the private link ($checks, $pages from App\Services\SeoGuide).
+    SEO guide content in Roman Urdu, shared by the admin page and the private link
+    ($checks, $pages from App\Services\SeoGuide). Admin menu and button names stay in English,
+    exactly as they appear on screen.
 --}}
 @php
     $host = request()->getHost();
@@ -12,239 +14,239 @@
     $verification = route('admin.settings.edit', 'verification');
 
     $automatic = [
-        'Title, meta description and keywords on every page — from the page’s SEO box, or the website defaults',
-        'Robots meta tag and X-Robots-Tag header: '.app(\App\Services\SeoService::class)->defaultRobots(),
-        'Canonical link on every page, pointing to the page itself',
-        'Author and publisher tags',
-        'Open Graph and Twitter tags — the title, text and photo shown when a link is shared on WhatsApp or Facebook',
-        'Local search tags (geo.region, geo.position) and the map pin of the society',
-        'Structured data for Google: business (RealEstateAgent), WebSite, breadcrumbs, plots (Product), FAQ and location (Place)',
-        'XML sitemap, updated by itself when plots or pages change',
-        'robots.txt with the sitemap link, and llms.txt for AI search assistants',
-        'Alt text on images, lazy loading and resized WebP images',
-        'Mobile-friendly pages with inline CSS for a fast first paint',
-        'Admin panel hidden from search engines',
+        'Har page par title, meta description aur keywords — page ke SEO box se, warna website ke default se',
+        'Robots meta tag aur X-Robots-Tag header: '.app(\App\Services\SeoService::class)->defaultRobots(),
+        'Har page par canonical link, jo usi page ki taraf ishara karta hai',
+        'Author aur publisher tags',
+        'Open Graph aur Twitter tags — WhatsApp ya Facebook par link share karne par title, text aur photo nazar aati hai',
+        'Local search tags (geo.region, geo.position) aur society ka map pin',
+        'Google ke liye structured data: business (RealEstateAgent), WebSite, breadcrumbs, plots (Product), FAQ aur location (Place)',
+        'XML sitemap, jo plots ya pages badalne par khud update hota hai',
+        'robots.txt (sitemap link ke saath), aur AI search ke liye llms.txt',
+        'Images par alt text, lazy loading aur chhoti WebP images',
+        'Mobile-friendly pages, aur tez loading ke liye inline CSS',
+        'Admin panel search engines se chhupa hua hai',
     ];
 
     $onPage = [
         [
-            'title' => 'Website title, description and keywords',
-            'text' => 'Open Settings → SEO & Scripts. This is what Google shows for the homepage, and the fallback for every other page.',
+            'title' => 'Website ka title, description aur keywords',
+            'text' => 'Settings → SEO & Scripts kholein. Homepage ke liye Google yehi dikhata hai, aur baaqi pages ke liye bhi yehi default hai.',
             'points' => [
-                'Title: 50–60 characters, main keyword first — e.g. “Model Town Khurrianwala – Plots on Installments Faisalabad”.',
-                'Description: 140–160 characters. Say what you offer, where, and give the phone number.',
-                'Keywords: type a phrase buyers search for and press Add — e.g. “5 marla plot for sale in Faisalabad”. Remove one with ×.',
+                'Title: 50–60 characters, main keyword shuru mein — maslan “Model Town Khurrianwala – Plots on Installments Faisalabad”.',
+                'Description: 140–160 characters. Batayein aap kya de rahe hain, kahan, aur phone number zaroor likhein.',
+                'Keywords: woh phrase likhein jo buyer Google par search karta hai, phir Add dabayein — maslan “5 marla plot for sale in Faisalabad”. Hatane ke liye × dabayein.',
             ],
             'links' => [['SEO settings', $seoSettings, true]],
         ],
         [
-            'title' => 'Each page’s own title and description',
-            'text' => 'Website Content → Pages → Edit next to a page → “SEO” box → Edit SEO.',
+            'title' => 'Har page ka apna title aur description',
+            'text' => 'Website Content → Pages → page ke saath Edit → “SEO” box → Edit SEO.',
             'points' => [
-                'Every page needs a different title and description. End the title with “| Model Town Khurrianwala”.',
-                'Add 3–5 keywords that fit that page only (e.g. Installment Plans: “plots on installments in Faisalabad”).',
-                'Leave “Canonical URL” empty and “Robots” on Default. Choose noindex only for a page Google should not show.',
+                'Har page ka title aur description alag hona chahiye. Title ke aakhir mein “| Model Town Khurrianwala” likhein.',
+                'Sirf usi page ke 3–5 keywords add karein (maslan Installment Plans ke liye: “plots on installments in Faisalabad”).',
+                '“Canonical URL” khaali chhorein aur “Robots” Default par rakhein. noindex sirf us page ke liye chunein jo Google par nahi dikhana.',
             ],
             'links' => [['Pages', route('admin.pages.index'), true]],
         ],
         [
             'title' => 'Plot pages',
-            'text' => 'Plots → All Plot Sizes → Edit → SEO box. Each plot size has its own page in Google.',
+            'text' => 'Plots → All Plot Sizes → Edit → SEO box. Har plot size ka Google mein apna alag page hai.',
             'points' => [
-                'Title like “5 Marla Plot for Sale in Faisalabad”. Put the price, down payment and monthly installment in the description.',
-                'Upload real photos of the plots; the plot name is used as their alt text.',
+                'Title is tarah likhein: “5 Marla Plot for Sale in Faisalabad”. Description mein price, down payment aur monthly installment likhein.',
+                'Plots ki asli photos upload karein; plot ka naam hi un photos ka alt text ban jata hai.',
             ],
             'links' => [['All Plot Sizes', route('admin.plots.index'), true]],
         ],
         [
             'title' => 'Location page',
-            'text' => 'Website Content → Locations → Edit. Keep the address and map pin exactly the same as on Google Business Profile (Off-page step 1).',
+            'text' => 'Website Content → Locations → Edit. Address aur map pin bilkul wohi rakhein jo Google Business Profile par hai (Off-page SEO ka step 1).',
             'links' => [['Locations', route('admin.locations.index'), true]],
         ],
         [
-            'title' => 'Headings and page text',
-            'text' => 'Google reads the words on the page. Pages with useful text rank higher than pages with only pictures.',
+            'title' => 'Headings aur page ka text',
+            'text' => 'Google page par likhe hue alfaaz parhta hai. Jin pages par kaam ka text hota hai, woh sirf tasveeron wale pages se upar aate hain.',
             'points' => [
-                'Each page has one main heading (the page heading). Keep the main keyword in it.',
-                'Write at least 300 words on the About and Plots pages: location, amenities, sizes, payment plan, possession.',
-                'Use keywords naturally. Repeating the same phrase again and again hurts ranking.',
+                'Har page ki aik main heading hoti hai (page heading). Main keyword us mein rakhein.',
+                'About aur Plots pages par kam az kam 300 alfaaz likhein: location, sahuliyaat, plot sizes, payment plan aur possession.',
+                'Keywords qudrati andaaz mein likhein. Aik hi phrase baar baar dohrane se ranking kharab hoti hai.',
             ],
             'links' => [['Homepage Sections', route('admin.sections.index'), true], ['Pages', route('admin.pages.index'), true]],
         ],
         [
             'title' => 'Photos',
-            'text' => 'Website Content → Gallery. The photo title becomes its alt text, which Google Images reads.',
+            'text' => 'Website Content → Gallery. Photo ka title hi us ka alt text banta hai, jise Google Images parhta hai.',
             'points' => [
-                'Give every photo a clear title, e.g. “Main gate of Model Town Khurrianwala, Jhumra Road”.',
-                'Name files before uploading (model-town-khurrianwala-main-gate.jpg) and keep them under 500 KB.',
+                'Har photo ko wazeh title dein, maslan “Model Town Khurrianwala ka main gate, Jhumra Road”.',
+                'Upload se pehle file ka naam rakhein (model-town-khurrianwala-main-gate.jpg) aur size 500 KB se kam rakhein.',
             ],
             'links' => [['Gallery', route('admin.gallery.index'), true]],
         ],
         [
             'title' => 'Videos',
-            'text' => 'Website Content → Videos. Give every video a title and description with a keyword. Videos on YouTube also bring visitors from YouTube search.',
+            'text' => 'Website Content → Videos. Har video ka title aur description keyword ke saath likhein. YouTube par lagi videos YouTube search se bhi visitors laati hain.',
             'links' => [['Videos', route('admin.videos.index'), true]],
         ],
         [
-            'title' => 'FAQs',
-            'text' => 'Website Content → FAQs. Add the questions buyers ask on the phone — Google can show them under your result.',
-            'points' => ['e.g. “What is the price of a 5 marla plot?”, “Is there a booking fee?”, “When is possession?”'],
+            'title' => 'FAQs (aksar poochay jane wale sawal)',
+            'text' => 'Website Content → FAQs. Woh sawal add karein jo buyers phone par poochte hain — Google inhein aap ke result ke neeche bhi dikha sakta hai.',
+            'points' => ['Maslan: “5 marla plot ki qeemat kya hai?”, “Kya booking fee hai?”, “Possession kab milega?”'],
             'links' => [['FAQs', route('admin.faqs.index'), true]],
         ],
         [
-            'title' => 'Links between pages',
-            'text' => 'Website Content → Menus. Keep Plots, Installment Plans, Location and Contact in the header and footer menus so Google finds every page.',
+            'title' => 'Pages ke darmiyan links',
+            'text' => 'Website Content → Menus. Plots, Installment Plans, Location aur Contact ko header aur footer menu mein rakhein taake Google har page dhoond sake.',
             'links' => [['Menus', route('admin.menus.index'), true]],
         ],
         [
-            'title' => 'Find more keywords',
-            'text' => 'Look at what people actually search for, then add those phrases to the website keywords and page text.',
+            'title' => 'Mazeed keywords dhoondein',
+            'text' => 'Dekhein log asal mein kya search karte hain, phir woh phrases website keywords aur page ke text mein add karein.',
             'points' => [
-                'Type “plots in Faisalabad” in Google and read the suggestions and the “People also ask” box.',
-                'Search Console → Performance → Queries shows the searches you already appear for (after Technical step 2).',
-                'Google Trends (Pakistan) compares phrases, e.g. “plot on installment” vs “plots for sale”.',
+                'Google mein “plots in Faisalabad” likhein aur neeche aane wali suggestions aur “People also ask” box parhein.',
+                'Search Console → Performance → Queries batata hai aap kin searches mein aa rahe hain (Technical SEO step 2 ke baad).',
+                'Google Trends (Pakistan) mein phrases ka muqabla karein, maslan “plot on installment” aur “plots for sale”.',
             ],
             'links' => [['Google Trends — Pakistan', 'https://trends.google.com/trends/explore?geo=PK&q=plots%20in%20faisalabad', false], ['Keyword Planner', 'https://ads.google.com/home/tools/keyword-planner/', false]],
         ],
         [
-            'title' => 'Check your work',
-            'text' => 'Open a page, right-click → View page source, and look for the title, description, keywords and robots tags. Or use the “Page by page check” below — it updates as soon as you save.',
-            'links' => [['Open website', $home, false]],
+            'title' => 'Apna kaam check karein',
+            'text' => 'Koi bhi page kholein, right-click → View page source, aur title, description, keywords aur robots tags dekhein. Ya neeche wala “Page-by-page check” dekhein — Save karte hi update ho jata hai.',
+            'links' => [['Website kholein', $home, false]],
         ],
     ];
 
     $technical = [
         [
-            'title' => 'Secure address (https) and one website address',
-            'text' => 'aaPanel → Website → '.$host.' → SSL → Let’s Encrypt → Apply, then switch on Force HTTPS. Choose one address (with or without www) and redirect the other one to it (aaPanel → Redirect, 301).',
-            'points' => ['In the server .env file set the line below, then run the server command again.'],
+            'title' => 'Secure address (https) aur website ka aik hi address',
+            'text' => 'aaPanel → Website → '.$host.' → SSL → Let’s Encrypt → Apply, phir Force HTTPS ON karein. Aik address chunein (www ke saath ya baghair) aur doosre ko us par redirect karein (aaPanel → Redirect, 301).',
+            'points' => ['Server ki .env file mein neeche wali line likhein, phir server command dobara chalayein.'],
             'code' => 'APP_URL=https://'.$host,
         ],
         [
-            'title' => 'Connect Google Search Console',
-            'text' => 'Search Console → Add property → “URL prefix” → https://'.$host.' → choose “HTML tag” → copy the tag. Paste it in Settings → Verification & Analytics → Google Search Console → Save. Go back to Search Console and click Verify.',
+            'title' => 'Google Search Console connect karein',
+            'text' => 'Search Console → Add property → “URL prefix” → https://'.$host.' → “HTML tag” chunein → tag copy karein. Usay Settings → Verification & Analytics → Google Search Console mein paste karke Save karein. Phir wapas Search Console mein Verify dabayein.',
             'links' => [['Google Search Console', 'https://search.google.com/search-console', false], ['Verification settings', $verification, true]],
         ],
         [
-            'title' => 'Submit the sitemap',
-            'text' => 'Search Console → Sitemaps → type the line below → Submit. After a day the status should say “Success”.',
+            'title' => 'Sitemap submit karein',
+            'text' => 'Search Console → Sitemaps → neeche wali line likhein → Submit. Aik din baad status “Success” hona chahiye.',
             'code' => 'sitemap.xml',
-            'links' => [['Open sitemap', $sitemap, false]],
+            'links' => [['Sitemap kholein', $sitemap, false]],
         ],
         [
-            'title' => 'Ask Google to index the main pages',
-            'text' => 'Search Console → URL inspection (top search box) → paste a page address → Request indexing. Do it for the homepage, Plots, Installment Plans, every plot size, Location and Contact — and again after you change a page.',
+            'title' => 'Main pages ko index karwayein',
+            'text' => 'Search Console → URL inspection (upar wala search box) → page ka address paste karein → Request indexing. Homepage, Plots, Installment Plans, har plot size, Location aur Contact ke liye yeh karein — aur jab bhi koi page badlein, dobara karein.',
         ],
         [
-            'title' => 'Connect Bing (also covers Yahoo and DuckDuckGo)',
-            'text' => 'Bing Webmaster Tools → sign in → “Import from Google Search Console” (fastest). Or add the site, choose “HTML Meta Tag” and paste it in Settings → Verification & Analytics → Bing. Submit the sitemap there too.',
+            'title' => 'Bing connect karein (Yahoo aur DuckDuckGo bhi isi se)',
+            'text' => 'Bing Webmaster Tools → sign in → “Import from Google Search Console” (sab se aasaan). Ya site add karke “HTML Meta Tag” chunein aur usay Settings → Verification & Analytics → Bing mein paste karein. Wahan bhi sitemap submit karein.',
             'links' => [['Bing Webmaster Tools', 'https://www.bing.com/webmasters', false], ['Verification settings', $verification, true]],
         ],
         [
-            'title' => 'Connect Google Analytics',
-            'text' => 'Google Analytics → Admin → Create property → Web → '.$host.' → copy the Measurement ID (G-XXXXXXXXXX). Paste it in Settings → Verification & Analytics → Google Analytics → Save. In Analytics, link Search Console under Admin → Product links.',
+            'title' => 'Google Analytics connect karein',
+            'text' => 'Google Analytics → Admin → Create property → Web → '.$host.' → Measurement ID (G-XXXXXXXXXX) copy karein. Usay Settings → Verification & Analytics → Google Analytics mein paste karke Save karein. Analytics mein Admin → Product links se Search Console bhi jor dein.',
             'links' => [['Google Analytics', 'https://analytics.google.com/', false], ['Verification settings', $verification, true]],
         ],
         [
-            'title' => 'Check the speed',
-            'text' => 'PageSpeed Insights → test the homepage and one plot page on Mobile. Aim for 90 or more.',
+            'title' => 'Speed check karein',
+            'text' => 'PageSpeed Insights → homepage aur aik plot page Mobile par test karein. 90 ya us se zyada ka target rakhein.',
             'points' => [
-                'Compress photos before uploading; keep “Load analytics after the first scroll or tap” on.',
-                'Run the server command after every update — it includes the speed script and image optimisation.',
+                'Photos upload se pehle compress karein; “Load analytics after the first scroll or tap” ON rakhein.',
+                'Har update ke baad server command chalayein — is mein speed script aur image optimisation dono shamil hain.',
             ],
             'links' => [['PageSpeed Insights', 'https://pagespeed.web.dev/', false]],
         ],
         [
-            'title' => 'Test the structured data',
-            'text' => 'Rich Results Test → test the homepage, the FAQ page and a plot page. Errors must be fixed; warnings are fine.',
+            'title' => 'Structured data test karein',
+            'text' => 'Rich Results Test → homepage, FAQ page aur aik plot page test karein. Errors theek karna zaroori hai; warnings se koi masla nahi.',
             'links' => [['Rich Results Test', 'https://search.google.com/test/rich-results', false], ['Schema validator', 'https://validator.schema.org/', false]],
         ],
         [
-            'title' => 'Keep robots.txt open',
-            'text' => 'robots.txt should show “Disallow:” with nothing after it (everything allowed) and the Sitemap line. Keep “Show this website in search engines” on in Settings → SEO.',
-            'links' => [['Open robots.txt', $robotsTxt, false], ['SEO settings', $seoSettings, true]],
+            'title' => 'robots.txt khula rakhein',
+            'text' => 'robots.txt mein “Disallow:” ke aage kuch nahi hona chahiye (yaani sab allowed hai) aur Sitemap wali line honi chahiye. Settings → SEO mein “Show this website in search engines” hamesha ON rakhein.',
+            'links' => [['robots.txt kholein', $robotsTxt, false], ['SEO settings', $seoSettings, true]],
         ],
         [
-            'title' => 'Weekly check in Search Console',
-            'text' => 'Look at Pages (why a page is not indexed), Core Web Vitals, HTTPS, and Security & Manual actions (both should be empty). If you delete or rename a page, set up a redirect so old links do not end on “page not found”.',
+            'title' => 'Search Console mein har hafte check',
+            'text' => 'Pages (koi page index kyun nahi hua), Core Web Vitals, HTTPS, aur Security & Manual actions dekhein (yeh dono khaali hone chahiyein). Agar koi page delete ya rename karein to redirect lagayein taake purane links “page not found” par na jayein.',
         ],
         [
-            'title' => 'See what Google has indexed',
-            'text' => 'Search for the line below on Google. Every important page should be listed.',
+            'title' => 'Dekhein Google ne kya index kiya hai',
+            'text' => 'Google par neeche wali line search karein. Har zaroori page list mein hona chahiye.',
             'code' => 'site:'.$host,
-            'links' => [['Search Google', 'https://www.google.com/search?q='.urlencode('site:'.$host), false]],
+            'links' => [['Google par search karein', 'https://www.google.com/search?q='.urlencode('site:'.$host), false]],
         ],
     ];
 
     $offPage = [
         [
-            'title' => 'Google Business Profile — the most important step',
-            'text' => 'This puts the society on Google Maps and in the map box for searches like “housing society near me” and “plots in Faisalabad”.',
+            'title' => 'Google Business Profile — sab se zaroori step',
+            'text' => 'Is se society Google Maps par aati hai, aur “housing society near me” ya “plots in Faisalabad” jaisi searches ke map box mein nazar aati hai.',
             'points' => [
-                'business.google.com → Add business → “Model Town Khurrianwala” → category e.g. Housing society or Real estate developer.',
-                'Exact address and map pin (Main Bazar Khurrianwala, Jhumra Road), phone '.$phone.', website https://'.$host.'.',
-                'Verify (postcard, phone or video), then add 20+ real photos, opening hours and the plot sizes as products.',
-                'Post an update or offer every week.',
+                'business.google.com → Add business → “Model Town Khurrianwala” → category maslan Housing society ya Real estate developer.',
+                'Bilkul sahi address aur map pin (Main Bazar Khurrianwala, Jhumra Road), phone '.$phone.', website https://'.$host.'.',
+                'Verify karein (postcard, phone ya video), phir 20 se zyada asli photos, office timings aur plot sizes (products ki tarah) add karein.',
+                'Har hafte aik update ya offer post karein.',
             ],
             'links' => [['Google Business Profile', 'https://business.google.com/', false]],
         ],
         [
             'title' => 'Google reviews',
-            'text' => 'Ask every buyer and site visitor for a review — send them the review link from your Business Profile. Reply to every review, good or bad. Never buy fake reviews.',
+            'text' => 'Har buyer aur site visit karne wale se review ki darkhwast karein — Business Profile se review link bhejein. Har review ka jawab dein, achha ho ya bura. Kabhi fake reviews na kharidein.',
         ],
         [
-            'title' => 'Same name, address and phone everywhere',
-            'text' => 'Write the business name, address and phone number exactly as on the website footer on every listing and profile. Google trusts details that match.',
+            'title' => 'Har jagah wohi naam, address aur phone',
+            'text' => 'Business ka naam, address aur phone number har listing aur profile par bilkul waisa hi likhein jaisa website ke footer mein hai. Jo details har jagah match karein, Google un par bharosa karta hai.',
         ],
         [
             'title' => 'Property portals',
-            'text' => 'List each plot size on Zameen.com, Graana.com and OLX with real photos, the price and installment plan, and the website link in the description.',
+            'text' => 'Har plot size Zameen.com, Graana.com aur OLX par asli photos, price aur installment plan ke saath list karein, aur description mein website ka link zaroor dein.',
             'links' => [['Zameen.com', 'https://www.zameen.com/', false], ['Graana.com', 'https://www.graana.com/', false], ['OLX', 'https://www.olx.com.pk/', false]],
         ],
         [
             'title' => 'Social media profiles',
-            'text' => 'Facebook page, Instagram, YouTube and TikTok: put the website link in the bio, post site progress every week, and add each profile in Settings → Social Links so Google connects them to the website.',
+            'text' => 'Facebook page, Instagram, YouTube aur TikTok: bio mein website ka link dein, har hafte site ki progress post karein, aur har profile Settings → Social Links mein add karein taake Google unhein website se jor sake.',
             'links' => [['Social Links', route('admin.social-links.index'), true]],
         ],
         [
             'title' => 'YouTube videos',
-            'text' => 'Upload a site tour, plot visits and development updates.',
+            'text' => 'Site tour, plot visits aur development updates ki videos upload karein.',
             'points' => [
-                'Title like “Model Town Khurrianwala Faisalabad – 5 Marla Plot on Installments | Site Tour”.',
-                'Website link in the first line of the description; then add the video under Videos on the website.',
+                'Title is tarah: “Model Town Khurrianwala Faisalabad – 5 Marla Plot on Installments | Site Tour”.',
+                'Description ki pehli line mein website ka link dein; phir woh video website ke Videos mein bhi add karein.',
             ],
         ],
         [
-            'title' => 'More map and business listings',
-            'text' => 'Add the society to Bing Places and Apple Business Connect, and to trusted Pakistani business directories — with the same details.',
+            'title' => 'Mazeed map aur business listings',
+            'text' => 'Society ko Bing Places, Apple Business Connect aur bharose ke qabil Pakistani business directories mein bhi add karein — wohi details ke saath.',
             'links' => [['Bing Places', 'https://www.bingplaces.com/', false], ['Apple Business Connect', 'https://businessconnect.apple.com/', false]],
         ],
         [
-            'title' => 'Links from other websites (backlinks)',
-            'text' => 'Ask Faisalabad news sites, property blogs and dealers who sell your plots to link to the website, e.g. with a news story about a development milestone.',
-            'points' => ['One link from a real local website is worth more than hundreds of spam links. Never buy link packages — Google can push the website down for it.'],
+            'title' => 'Doosri websites se links (backlinks)',
+            'text' => 'Faisalabad ki news websites, property blogs aur aap ke plots bechne wale dealers se apni website ka link lagwayein — maslan kisi development milestone ki khabar ke saath.',
+            'points' => ['Aik asli local website ka link sainkron spam links se behtar hai. Kabhi link packages na kharidein — Google is wajah se website ko neeche kar sakta hai.'],
         ],
         [
-            'title' => 'WhatsApp and Facebook groups',
-            'text' => 'Share page links (Plots, Installment Plans) and your short link in Faisalabad property groups, so visitors land on the website, not only on a phone number.',
+            'title' => 'WhatsApp aur Facebook groups',
+            'text' => 'Faisalabad ke property groups mein page links (Plots, Installment Plans) aur apna short link share karein, taake log sirf phone number par nahi balke website par aayein.',
             'links' => [['Short link settings', route('admin.settings.edit', 'redirect'), true]],
         ],
         [
-            'title' => 'Measure the results',
-            'text' => 'Search Console → Performance shows searches, clicks and position; Links shows who links to you. Business Profile → Performance shows calls and direction requests.',
+            'title' => 'Nataij (results) dekhein',
+            'text' => 'Search Console → Performance mein searches, clicks aur position; Links mein yeh ke kaun aap ko link kar raha hai. Business Profile → Performance mein calls aur direction requests.',
             'links' => [['Google Search Console', 'https://search.google.com/search-console', false]],
         ],
     ];
 
     $routine = [
-        'Every week' => ['Post on Google Business Profile and social media (photos of development work).', 'Reply to new Google reviews.', 'Search Console: check Performance and fix new errors under Pages.'],
-        'Every month' => ['Open this guide and fix anything marked red.', 'Add 1–2 new FAQs or more page text.', 'Test speed on PageSpeed Insights.', 'Update prices and plans on the website and the property portals together.'],
-        'After every website update' => ['Run the server command.', 'Request indexing for pages that changed.'],
+        'Har hafte' => ['Google Business Profile aur social media par post karein (development kaam ki photos).', 'Naye Google reviews ka jawab dein.', 'Search Console: Performance dekhein aur Pages mein naye errors theek karein.'],
+        'Har mahine' => ['Yeh guide kholein aur jo bhi laal (red) hai woh theek karein.', '1–2 naye FAQs ya pages par mazeed text add karein.', 'PageSpeed Insights par speed test karein.', 'Prices aur plans website aur property portals par aik saath update karein.'],
+        'Website update ke baad' => ['Server command chalayein.', 'Jo pages badle hain un ke liye Request indexing karein.'],
     ];
 @endphp
 
-<nav class="scrollbar-none -mx-4 mb-6 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:px-0" aria-label="Guide sections">
-    @foreach (['status' => 'SEO status', 'on-page' => 'On-page SEO', 'pages' => 'Page by page check', 'technical' => 'Technical SEO', 'off-page' => 'Off-page SEO', 'routine' => 'Routine', 'links' => 'Useful links'] as $anchor => $label)
+<nav class="scrollbar-none -mx-4 mb-6 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:px-0" aria-label="Guide ke hisse">
+    @foreach (['status' => 'SEO Status', 'on-page' => 'On-page SEO', 'pages' => 'Page-by-page check', 'technical' => 'Technical SEO', 'off-page' => 'Off-page SEO', 'routine' => 'Routine', 'links' => 'Kaam ke links'] as $anchor => $label)
         <a href="#{{ $anchor }}" class="shrink-0 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-medium text-slate-700 shadow-xs transition hover:border-slate-300 hover:text-slate-900">{{ $label }}</a>
     @endforeach
 </nav>
@@ -252,7 +254,7 @@
 <div class="space-y-6">
     <section id="status" class="scroll-mt-24">
         <div class="grid gap-6 xl:grid-cols-2">
-            <x-admin.card title="Your SEO checklist" :description="$done.' of '.count($checks).' done. Red items need you — each has a button to the right place.'" :padding="false">
+            <x-admin.card title="Aap ki SEO checklist" :description="count($checks).' mein se '.$done.' mukammal. Laal (red) items par aap ka kaam baaqi hai — har aik ke saath sahi jagah ka button hai.'" :padding="false">
                 <ul class="divide-y divide-slate-100">
                     @foreach ($checks as $check)
                         <li class="flex items-start gap-3 px-5 py-3.5">
@@ -269,7 +271,7 @@
                 </ul>
             </x-admin.card>
 
-            <x-admin.card title="Already done by the website" description="On-page SEO that works on every page automatically — nothing to do.">
+            <x-admin.card title="Website yeh sab khud kar rahi hai" description="Yeh on-page SEO har page par khud-ba-khud kaam karta hai — is ke liye aap ko kuch nahi karna.">
                 <ul class="space-y-2.5">
                     @foreach ($automatic as $item)
                         <li class="flex gap-2.5 text-sm text-slate-700">
@@ -282,19 +284,19 @@
     </section>
 
     <section id="on-page" class="scroll-mt-24">
-        <x-admin.card title="On-page SEO — step by step" description="What is on your own pages: titles, descriptions, keywords, text and photos. Buttons with a lock open the admin panel (sign in first).">
+        <x-admin.card title="On-page SEO — step by step" description="Aap ke apne pages par jo kuch hai: titles, descriptions, keywords, text aur photos. Lock wale buttons admin panel kholte hain (pehle sign in karein).">
             @include('admin.seo-guide._steps', ['steps' => $onPage])
         </x-admin.card>
     </section>
 
     <section id="pages" class="scroll-mt-24">
-        <x-admin.card title="Page by page check" description="The title and description Google gets for each page right now. Titles: 30–65 characters. Descriptions: 110–165 characters." :padding="false">
+        <x-admin.card title="Page-by-page check" description="Har page ka woh title aur description jo is waqt Google ko mil raha hai. Title: 30–65 characters. Description: 110–165 characters." :padding="false">
             <div class="overflow-x-auto">
                 <table class="a-table">
                     <thead>
                         <tr>
                             <th>Page</th>
-                            <th>Title &amp; description in Google</th>
+                            <th>Google mein title aur description</th>
                             <th>Keywords</th>
                             <th>Status</th>
                             <th class="text-right">Edit</th>
@@ -311,13 +313,13 @@
                                     <p class="mt-0.5 text-xs leading-relaxed text-slate-500">{{ $row['description'] ?: '—' }} @if ($row['description'])<span class="text-slate-400">({{ mb_strlen($row['description']) }})</span>@endif</p>
                                 </td>
                                 <td class="whitespace-nowrap text-xs text-slate-600">
-                                    {{ $row['keywords'] }} <span class="text-slate-400">{{ $row['own_keywords'] ? 'own' : 'website' }}</span>
+                                    {{ $row['keywords'] }} <span class="text-slate-400">{{ $row['own_keywords'] ? 'apne' : 'website ke' }}</span>
                                 </td>
                                 <td>
                                     @if ($row['ok'])
-                                        <span class="a-badge bg-emerald-50 text-emerald-700 ring-emerald-600/20">Good</span>
+                                        <span class="a-badge bg-emerald-50 text-emerald-700 ring-emerald-600/20">Theek hai</span>
                                     @else
-                                        <span class="a-badge bg-amber-50 text-amber-800 ring-amber-600/20">Check</span>
+                                        <span class="a-badge bg-amber-50 text-amber-800 ring-amber-600/20">Check karein</span>
                                         <ul class="mt-1 space-y-0.5 text-xs text-amber-800">
                                             @foreach ($row['issues'] as $issue)
                                                 <li>{{ $issue }}</li>
@@ -337,19 +339,19 @@
     </section>
 
     <section id="technical" class="scroll-mt-24">
-        <x-admin.card title="Technical SEO — your flow" description="Do these once, in this order. They let Google find, trust and measure the website.">
+        <x-admin.card title="Technical SEO — aap ka flow" description="Yeh kaam aik dafa, isi tarteeb se karein. In se Google website ko dhoond sakta hai, us par bharosa karta hai, aur aap visitors gin sakte hain.">
             @include('admin.seo-guide._steps', ['steps' => $technical])
         </x-admin.card>
     </section>
 
     <section id="off-page" class="scroll-mt-24">
-        <x-admin.card title="Off-page SEO" description="Work outside the website that makes Google trust it more: maps, reviews, listings, social media and links from other websites.">
+        <x-admin.card title="Off-page SEO" description="Website se bahar ka kaam jo Google ka bharosa barhata hai: maps, reviews, listings, social media aur doosri websites ke links.">
             @include('admin.seo-guide._steps', ['steps' => $offPage])
         </x-admin.card>
     </section>
 
     <section id="routine" class="scroll-mt-24">
-        <x-admin.card title="Routine" description="SEO keeps working when it is done a little, regularly.">
+        <x-admin.card title="Routine" description="SEO tab kaam karta hai jab thora thora, baqaidagi se kiya jaye.">
             <div class="grid gap-5 md:grid-cols-3">
                 @foreach ($routine as $when => $tasks)
                     <div class="rounded-lg border border-slate-200 p-4">
@@ -366,7 +368,7 @@
     </section>
 
     <section id="links" class="scroll-mt-24">
-        <x-admin.card title="Useful links">
+        <x-admin.card title="Kaam ke links">
             <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ([
                     ['Sitemap', $sitemap, 'file-search'],

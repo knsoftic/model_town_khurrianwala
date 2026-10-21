@@ -62,7 +62,7 @@
             @if ($group === 'seo')
                 <div class="mb-6 grid gap-3 sm:grid-cols-3">
                     @foreach ([
-                        ['SEO Guide', 'Checklist and step-by-step help', route('admin.seo-guide'), 'book-open', false],
+                        ['SEO Guide', 'Checklist aur step-by-step rehnumai', route('admin.seo-guide'), 'book-open', false],
                         ['Sitemap', str_replace(['https://', 'http://'], '', route('sitemap')), route('sitemap'), 'file-search', true],
                         ['robots.txt', str_replace(['https://', 'http://'], '', url('robots.txt')), url('robots.txt'), 'file-search', true],
                     ] as [$label, $text, $url, $icon, $external])

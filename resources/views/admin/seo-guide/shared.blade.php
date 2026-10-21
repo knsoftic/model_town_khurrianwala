@@ -35,11 +35,11 @@
     </header>
 
     <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <x-admin.page-header title="SEO Guide" description="What is already done, what still needs work, and step-by-step instructions for on-page, technical and off-page SEO." />
+        <x-admin.page-header title="SEO Guide" description="Kya ho chuka hai, kis cheez par kaam baaqi hai, aur on-page, technical aur off-page SEO ki step-by-step rehnumai." />
 
         <p class="mb-6 flex gap-2.5 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
             <x-icon name="lock" class="mt-0.5 size-4 text-sky-700" />
-            <span>Buttons with a lock open the website’s admin panel, which asks you to sign in. Everything else opens without a login.</span>
+            <span>Lock wale buttons website ka admin panel kholte hain, jo sign in maangta hai. Baaqi sab kuch bina login ke khulta hai.</span>
         </p>
 
         @include('admin.seo-guide._guide')

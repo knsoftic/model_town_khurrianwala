@@ -103,10 +103,10 @@ class SeoTest extends TestCase
         $this->actingAs($this->staff('sales-manager'))->get('/admin/seo-guide')->assertForbidden();
 
         $this->actingAs($this->admin)->get('/admin/seo-guide')->assertOk()
-            ->assertSee('Private link to this guide')
+            ->assertSee('Is guide ka private link')
             ->assertSee(app(SeoGuide::class)->shareUrl(), false)
-            ->assertSee('Technical SEO — your flow')
-            ->assertSee('Page by page check');
+            ->assertSee('Technical SEO — aap ka flow')
+            ->assertSee('Page-by-page check');
     }
 
     public function test_private_link_opens_the_guide_alone_without_a_login(): void
@@ -118,7 +118,7 @@ class SeoTest extends TestCase
             ->assertSee('Off-page SEO')
             ->assertSee(route('admin.settings.edit', 'seo'), false)
             ->assertDontSee('aria-label="Admin"', false)
-            ->assertDontSee('Private link to this guide');
+            ->assertDontSee('Is guide ka private link');
 
         $this->get('/seo-guide/not-the-token')->assertNotFound();
     }
